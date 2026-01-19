@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAANG Interview Preparation Roadmap</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .tree {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .tree-item {
+            margin: 8px 0;
+        }
+
+        .tree-node {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .tree-node:hover {
+            background: #e9ecef;
+            border-left-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .tree-node.month {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+
+        .tree-node.month:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .tree-node.week {
+            background: #e3f2fd;
+            color: #1976d2;
+            font-weight: 600;
+            margin-left: 20px;
+        }
+
+        .tree-node.week:hover {
+            background: #bbdefb;
+        }
+
+        .tree-node.category {
+            background: #f5f5f5;
+            color: #555;
+            margin-left: 40px;
+            font-size: 0.95em;
+        }
+
+        .tree-node.category:hover {
+            background: #e0e0e0;
+        }
+
+        .tree-node.category a {
+            color: #667eea;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .tree-node.category a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .toggle-icon {
+            margin-right: 10px;
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+        }
+
+        .toggle-icon.expanded {
+            transform: rotate(90deg);
+        }
+
+        .children {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .children.expanded {
+            max-height: 5000px;
+        }
+
+        .file-icon {
+            margin-left: 10px;
+            font-size: 0.9em;
+            opacity: 0.7;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .roadmap-link {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .roadmap-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .roadmap-link a:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .content-viewer {
+            position: fixed;
+            top: 0;
+            right: -50%;
+            width: 50%;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .content-viewer.open {
+            right: 0;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .content-title {
+            font-size: 1.8em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+
+        .content-body {
+            line-height: 1.8;
+            color: #444;
+        }
+
+        .content-body h1 {
+            color: #667eea;
+            font-size: 2em;
+            margin: 25px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .content-body h2 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 20px 0 12px 0;
+            padding-top: 15px;
+        }
+
+        .content-body h3 {
+            color: #555;
+            font-size: 1.3em;
+            margin: 15px 0 10px 0;
+        }
+
+        .content-body h4 {
+            color: #666;
+            font-size: 1.1em;
+            margin: 12px 0 8px 0;
+        }
+
+        .content-body p {
+            margin: 12px 0;
+            color: #555;
+        }
+
+        .content-body ul, .content-body ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .content-body li {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .content-body code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+
+        .content-body pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .content-body pre code {
+            background: transparent;
+            color: #f8f8f2;
+            padding: 0;
+        }
+
+        .content-body blockquote {
+            border-left: 4px solid #667eea;
+            padding-left: 20px;
+            margin: 15px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        .content-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .content-body th, .content-body td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .content-body th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        .content-body tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .content-body strong {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .content-body em {
+            color: #666;
+        }
+
+        .content-body a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .content-body a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .tree-node.category {
+            position: relative;
+        }
+
+        .tree-node.category.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tree-node.category.active:hover {
+            background: #764ba2;
+        }
+
+        @media (max-width: 768px) {
+            .content-viewer {
+                width: 100%;
+                right: -100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 MAANG Interview Preparation Roadmap</h1>
+        <p class="subtitle">6-Month Comprehensive Preparation Plan</p>
+
+        <div class="roadmap-link">
+            <a href="ROADMAP.md" target="_blank">📋 View Full Roadmap Document</a>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Months</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Weeks</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">212+</div>
+                <div class="stat-label">DSA Problems</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">4</div>
+                <div class="stat-label">Categories/Week</div>
+            </div>
+        </div>
+
+        <ul class="tree" id="roadmapTree"></ul>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="content-viewer" id="contentViewer">
+        <div class="content-header">
+            <div class="content-title" id="contentTitle">Content</div>
+            <button class="close-btn" id="closeBtn">✕ Close</button>
+        </div>
+        <div class="content-body" id="contentBody">
+            <div class="loading">Click on any category to view content...</div>
+        </div>
+    </div>
+
+    <script>
+        // Roadmap structure
+        const roadmap = {
+            months: [
+                { number: 1, name: "Foundation", focus: "Core data structures and algorithms" },
+                { number: 2, name: "Advanced Algorithms", focus: "Graphs, Dynamic Programming, Advanced Data Structures" },
+                { number: 3, name: "Advanced Topics", focus: "Advanced DP, Advanced Graphs, String Algorithms, Advanced Trees" },
+                { number: 4, name: "Specialized Topics", focus: "Bit Manipulation, Math, Design Problems, Mock Interviews" },
+                { number: 5, name: "Interview Preparation", focus: "Mock Interviews, Company-Specific Prep, Optimization" },
+                { number: 6, name: "Interview Execution", focus: "Active Interviews, Performance Analysis, Continuous Improvement" }
+            ],
+            categories: ['Behavioral', 'DSA', 'System_Design', 'Revision']
+        };
+
+        function createTreeItem(node, children = null) {
+            const li = document.createElement('li');
+            li.className = 'tree-item';
+
+            const div = document.createElement('div');
+            div.className = `tree-node ${node.type}`;
+            
+            if (children) {
+                const toggle = document.createElement('span');
+                toggle.className = 'toggle-icon';
+                toggle.textContent = '▶';
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggle.classList.toggle('expanded');
+                    children.classList.toggle('expanded');
+                });
+                div.appendChild(toggle);
+            }
+
+            const text = document.createElement('span');
+            text.textContent = node.text;
+            div.appendChild(text);
+
+            if (node.type === 'category') {
+                div.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    await loadContent(node, div);
+                });
+            } else if (node.link) {
+                const link = document.createElement('a');
+                link.href = node.link;
+                link.target = '_blank';
+                link.textContent = '';
+                link.className = 'file-icon';
+                link.textContent = ' 📄';
+                link.title = 'Open file';
+                link.addEventListener('click', (e) => e.stopPropagation());
+                div.appendChild(link);
+            }
+
+            if (children) {
+                div.addEventListener('click', () => {
+                    const toggle = div.querySelector('.toggle-icon');
+                    if (toggle) {
+                        toggle.classList.toggle('expanded');
+                        children.classList.toggle('expanded');
+                    }
+                });
+            }
+
+            li.appendChild(div);
+            if (children) {
+                li.appendChild(children);
+            }
+
+            return li;
+        }
+
+        function buildTree() {
+            const tree = document.getElementById('roadmapTree');
+            
+            roadmap.months.forEach(month => {
+                const monthChildren = document.createElement('ul');
+                monthChildren.className = 'children';
+                monthChildren.style.listStyle = 'none';
+                monthChildren.style.paddingLeft = '0';
+
+                // Create 4 weeks for each month
+                for (let week = 1; week <= 4; week++) {
+                    const weekChildren = document.createElement('ul');
+                    weekChildren.className = 'children';
+                    weekChildren.style.listStyle = 'none';
+                    weekChildren.style.paddingLeft = '0';
+
+                    // Create categories for each week
+                    roadmap.categories.forEach(category => {
+                        const categoryNode = {
+                            type: 'category',
+                            text: category,
+                            link: `Month_${month.number}/Week_${week}/${category}.md`,
+                            month: month.number,
+                            week: week,
+                            category: category
+                        };
+                        weekChildren.appendChild(createTreeItem(categoryNode));
+                    });
+
+                    const weekNode = {
+                        type: 'week',
+                        text: `Week ${week}`
+                    };
+                    const weekItem = createTreeItem(weekNode, weekChildren);
+                    monthChildren.appendChild(weekItem);
+                }
+
+                const monthNode = {
+                    type: 'month',
+                    text: `Month ${month.number}: ${month.name} - ${month.focus}`
+                };
+                const monthItem = createTreeItem(monthNode, monthChildren);
+                tree.appendChild(monthItem);
+            });
+        }
+
+        // Initialize tree on page load
+        buildTree();
+
+        // Expand first month by default
+        window.addEventListener('load', () => {
+            const firstMonth = document.querySelector('.tree-item .tree-node.month');
+            if (firstMonth) {
+                const toggle = firstMonth.querySelector('.toggle-icon');
+                const children = firstMonth.parentElement.querySelector('.children');
+                if (toggle && children) {
+                    toggle.classList.add('expanded');
+                    children.classList.add('expanded');
+                }
+            }
+        });
+
+        
+        // Content loading and display
+        async function loadContent(node, categoryElement) {
+            const contentViewer = document.getElementById('contentViewer');
+            const contentBody = document.getElementById('contentBody');
+            const contentTitle = document.getElementById('contentTitle');
+            const overlay = document.getElementById('overlay');
+            
+            // Update title
+            contentTitle.textContent = `Month ${node.month} - Week ${node.week} - ${node.category}`;
+            
+            // Show loading
+            contentBody.innerHTML = '<div class="loading">Loading content...</div>';
+            
+            // Open viewer
+            contentViewer.classList.add('open');
+            overlay.classList.add('active');
+            
+            // Remove active class from all categories
+            document.querySelectorAll('.tree-node.category').forEach(cat => {
+                cat.classList.remove('active');
+            });
+            
+            // Add active class to clicked category
+            if (categoryElement) {
+                categoryElement.classList.add('active');
+            }
+            
+            try {
+                // Get content from embedded data
+                const markdown = embeddedContent[node.month]?.[node.week]?.[node.category];
+                
+                if (!markdown) {
+                    throw new Error('Content not found');
+                }
+                
+                // Configure marked options
+                marked.setOptions({
+                    breaks: true,
+                    gfm: true,
+                    headerIds: true,
+                    mangle: false
+                });
+                
+                // Convert markdown to HTML
+                const html = marked.parse(markdown);
+                contentBody.innerHTML = html;
+            } catch (error) {
+                contentBody.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #e74c3c;">
+                        <h2>⚠️ Error Loading Content</h2>
+                        <p>Could not load the markdown content for: Month ${node.month} - Week ${node.week} - ${node.category}</p>
+                        <p style="margin-top: 20px; color: #666;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Close content viewer
+        document.getElementById('closeBtn').addEventListener('click', () => {
+            document.getElementById('contentViewer').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
+        });
+
+        document.getElementById('overlay').addEventListener('click', () => {
+            document.getElementById('contentViewer').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('contentViewer').classList.remove('open');
+                document.getElementById('overlay').classList.remove('active');
+            }
+        });
+    </script>
+
+        <script>
+            // Embedded markdown content
+            const embeddedContent = {
+  "1": {
+    "1": {
+      "Behavioral": "# Behavioral - Week 1\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Leadership/Impact\r\n- **Situation**: Describe a critical production issue or feature deadline\r\n- **Task**: Your responsibility and constraints\r\n- **Action**: Technical decisions, team coordination, problem-solving steps\r\n- **Result**: Quantifiable impact (uptime, revenue, user satisfaction)\r\n\r\n### Technical Challenge\r\n- **Situation**: Complex technical problem (scalability, performance, architecture)\r\n- **Task**: Requirements and constraints\r\n- **Action**: Research, design decisions, implementation approach\r\n- **Result**: Metrics (latency reduction, cost savings, scalability achieved)\r\n\r\n### Collaboration\r\n- **Situation**: Cross-functional project or conflict\r\n- **Task**: Deliverable and stakeholders\r\n- **Action**: Communication strategy, compromise, technical solutions\r\n- **Result**: Project success, relationship outcomes\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Dealt with a difficult technical problem\r\n  - Disagreed with a technical decision\r\n  - Had to learn something new quickly\r\n  - Improved system performance\r\n  - Worked with a difficult team member\r\n\r\n## Preparation\r\n- Write 5-7 STAR stories (2-3 min each)\r\n- Quantify results (numbers, percentages, time saved)\r\n- Practice concise delivery (avoid rambling)\r\n- Prepare follow-up answers for \"What would you do differently?\"\r\n",
+      "DSA": "# DSA - Week 1\r\n\r\n## Topics (Order)\r\n1. Arrays & Strings Basics\r\n2. Two Pointers Technique\r\n3. Prefix Sum\r\n4. Basic Sorting\r\n\r\n## Patterns to Learn\r\n- Two Pointers (opposite ends, same direction)\r\n- Sliding Window (fixed size)\r\n- Prefix/Postfix Sum\r\n- In-place array manipulation\r\n\r\n## Problems (12 total)\r\n\r\n### Arrays\r\n- [MUST] Two Sum (1)\r\n- [MUST] Best Time to Buy and Sell Stock (121)\r\n- [MUST] Contains Duplicate (217)\r\n- [GOOD] Product of Array Except Self (238)\r\n- [GOOD] Maximum Subarray (53)\r\n\r\n### Two Pointers\r\n- [MUST] Valid Palindrome (125)\r\n- [MUST] 3Sum (15)\r\n- [GOOD] Container With Most Water (11)\r\n- [GOOD] Trapping Rain Water (42)\r\n\r\n### Strings\r\n- [MUST] Valid Anagram (242)\r\n- [GOOD] Group Anagrams (49)\r\n- [GOOD] Longest Palindromic Substring (5)\r\n\r\n## Focus\r\n- Time/space complexity analysis\r\n- Edge cases (empty, single element, duplicates)\r\n- JavaScript array methods vs manual loops\r\n",
+      "System_Design": "# System Design - Week 1\r\n\r\n## Core Concepts\r\n- Scalability basics (vertical vs horizontal)\r\n- Load balancing (round-robin, least connections)\r\n- Caching strategies (LRU, write-through, write-back)\r\n- Database types (SQL vs NoSQL trade-offs)\r\n\r\n## Interview Focus Points\r\n- **Capacity estimation**: QPS, storage, bandwidth\r\n- **API design**: RESTful principles, status codes\r\n- **Data models**: Normalization, denormalization\r\n- **Consistency models**: Strong, eventual, weak\r\n\r\n## Practice\r\n- Design a URL shortener (basic version)\r\n- Design a rate limiter\r\n- Design a key-value store (basic)\r\n\r\n## Reading\r\n- High-level system design primer\r\n- CAP theorem basics\r\n- ACID vs BASE\r\n",
+      "Revision": "# Revision - Week 1\r\n\r\n## What to Revise\r\n- Arrays: Two Sum, Best Time to Buy and Sell Stock\r\n- Two Pointers: Valid Palindrome, 3Sum\r\n- Strings: Valid Anagram\r\n- Time complexity of all solutions\r\n\r\n## Re-solve Strategy\r\n1. **Day 1-2**: Re-solve [MUST] problems without looking at solutions\r\n2. **Day 3**: Review patterns (two pointers, prefix sum)\r\n3. **Day 4**: Re-solve [GOOD] problems with time constraints (30 min each)\r\n4. **Day 5**: Mock interview: Pick 2 random problems, solve in 45 min\r\n\r\n## Focus Areas\r\n- Code clarity and variable naming\r\n- Handling edge cases first\r\n- Explaining approach before coding\r\n- Optimizing after brute force solution\r\n\r\n## Common Mistakes to Avoid\r\n- Off-by-one errors in loops\r\n- Not handling empty/null inputs\r\n- Forgetting to sort before two pointers\r\n- Incorrect time complexity analysis\r\n"
+    },
+    "2": {
+      "Behavioral": "# Behavioral - Week 2\r\n\r\n## STAR Stories to Prepare\r\n\r\n### System Design / Architecture\r\n- **Situation**: System performance issue or scalability challenge\r\n- **Task**: Redesign or optimize existing system\r\n- **Action**: Architecture decisions, trade-offs considered, migration plan\r\n- **Result**: Performance metrics, cost reduction, improved reliability\r\n\r\n### Failure / Recovery\r\n- **Situation**: Production incident or system failure\r\n- **Task**: Minimize downtime, restore service\r\n- **Action**: Debugging process, rollback strategy, communication\r\n- **Result**: Recovery time, lessons learned, preventive measures\r\n\r\n### Innovation / Initiative\r\n- **Situation**: Identified improvement opportunity\r\n- **Task**: Propose and implement solution\r\n- **Action**: Research, prototyping, stakeholder buy-in\r\n- **Result**: Adoption rate, efficiency gains, business impact\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Designed a system from scratch\r\n  - Handled a production outage\r\n  - Optimized a slow system\r\n  - Made a technical decision with incomplete information\r\n  - Mentored a junior developer\r\n\r\n## Preparation\r\n- Refine Week 1 stories based on feedback\r\n- Add 2-3 new stories (system design focus)\r\n- Practice technical depth without jargon overload\r\n- Prepare questions to ask interviewer\r\n",
+      "DSA": "# DSA - Week 2\r\n\r\n## Topics (Order)\r\n1. Hash Maps / Hash Sets\r\n2. Sliding Window (variable size)\r\n3. String Manipulation\r\n4. Matrix Operations\r\n\r\n## Patterns to Learn\r\n- Hash map for frequency counting\r\n- Hash set for existence checks\r\n- Sliding window (expand/contract)\r\n- Character frequency maps\r\n- Matrix traversal (spiral, diagonal)\r\n\r\n## Problems (14 total)\r\n\r\n### Hash Maps\r\n- [MUST] Two Sum (1) - revisit with hash map\r\n- [MUST] Longest Substring Without Repeating Characters (3)\r\n- [MUST] Subarray Sum Equals K (560)\r\n- [GOOD] Design HashMap (706)\r\n- [GOOD] First Missing Positive (41)\r\n\r\n### Sliding Window\r\n- [MUST] Minimum Window Substring (76)\r\n- [MUST] Longest Repeating Character Replacement (424)\r\n- [GOOD] Permutation in String (567)\r\n- [GOOD] Maximum Average Subarray I (643)\r\n\r\n### String Manipulation\r\n- [MUST] Longest Palindromic Substring (5) - revisit\r\n- [GOOD] String to Integer (atoi) (8)\r\n- [GOOD] Valid Parentheses (20)\r\n- [GOOD] Decode String (394)\r\n\r\n### Matrix\r\n- [GOOD] Set Matrix Zeroes (73)\r\n- [GOOD] Spiral Matrix (54)\r\n\r\n## Focus\r\n- Hash map time complexity (O(1) average, O(n) worst)\r\n- Sliding window template (left/right pointers)\r\n- String immutability in JavaScript\r\n- Matrix boundary conditions\r\n",
+      "System_Design": "# System Design - Week 2\r\n\r\n## Core Concepts\r\n- Database indexing (B-tree, hash index)\r\n- Database replication (master-slave, master-master)\r\n- Caching layers (CDN, application cache, database cache)\r\n- Message queues (pub/sub, point-to-point)\r\n\r\n## Interview Focus Points\r\n- **Database sharding**: Horizontal partitioning strategies\r\n- **Cache invalidation**: Cache-aside, write-through patterns\r\n- **API rate limiting**: Token bucket, sliding window algorithms\r\n- **Data consistency**: Read replicas, eventual consistency trade-offs\r\n\r\n## Practice\r\n- Design a distributed cache (Redis-like)\r\n- Design a chat system (basic)\r\n- Design a notification system\r\n\r\n## Reading\r\n- Database indexing deep dive\r\n- Cache replacement policies (LRU, LFU, FIFO)\r\n- Message queue patterns (Kafka, RabbitMQ basics)\r\n",
+      "Revision": "# Revision - Week 2\r\n\r\n## What to Revise\r\n- Week 1: Arrays, Two Pointers (quick review)\r\n- Hash maps: Two Sum, Longest Substring Without Repeating Characters\r\n- Sliding window: Minimum Window Substring, Longest Repeating Character Replacement\r\n- String manipulation patterns\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Re-solve Week 1 [MUST] problems (time-boxed: 20 min each)\r\n2. **Day 2**: Hash map problems from Week 2\r\n3. **Day 3**: Sliding window problems (focus on template)\r\n4. **Day 4**: Mixed practice (2 problems from each week)\r\n5. **Day 5**: Mock interview: 2 problems, 45 min total\r\n\r\n## Focus Areas\r\n- Hash map vs array trade-offs\r\n- Sliding window boundary conditions\r\n- String manipulation edge cases (empty, single char, special chars)\r\n- Code optimization (reduce space complexity)\r\n\r\n## Common Mistakes to Avoid\r\n- Using hash map when array would suffice\r\n- Sliding window: not updating window correctly\r\n- String operations: not considering Unicode/edge cases\r\n- Forgetting to handle empty hash map cases\r\n"
+    },
+    "3": {
+      "Behavioral": "# Behavioral - Week 3\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Code Quality / Best Practices\r\n- **Situation**: Technical debt or code quality issues\r\n- **Task**: Improve maintainability, reduce bugs\r\n- **Action**: Refactoring strategy, testing approach, code reviews\r\n- **Result**: Bug reduction, faster feature development, team velocity\r\n\r\n### Trade-offs / Decision Making\r\n- **Situation**: Conflicting requirements or technical constraints\r\n- **Task**: Make decision with trade-offs\r\n- **Action**: Analysis of options, stakeholder discussions, documentation\r\n- **Result**: Decision outcome, lessons learned, impact on project\r\n\r\n### Learning / Growth\r\n- **Situation**: New technology or domain knowledge needed\r\n- **Task**: Learn and apply quickly\r\n- **Action**: Learning approach, resources used, practice method\r\n- **Result**: Implementation success, knowledge transfer to team\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Refactored legacy code\r\n  - Made a trade-off between performance and maintainability\r\n  - Learned a new technology for a project\r\n  - Improved code review process\r\n  - Handled conflicting priorities\r\n\r\n## Preparation\r\n- Review all stories (Week 1-3): ensure variety\r\n- Practice 2-min versions of each story\r\n- Prepare for \"What's your weakness?\" (technical focus)\r\n- Research company values, align stories\r\n",
+      "DSA": "# DSA - Week 3\r\n\r\n## Topics (Order)\r\n1. Linked Lists\r\n2. Stacks\r\n3. Queues\r\n4. Deques\r\n\r\n## Patterns to Learn\r\n- Fast & slow pointers (cycle detection)\r\n- Dummy head node technique\r\n- Stack for matching/validation\r\n- Monotonic stack\r\n- Queue for BFS (preview)\r\n\r\n## Problems (13 total)\r\n\r\n### Linked Lists\r\n- [MUST] Reverse Linked List (206)\r\n- [MUST] Merge Two Sorted Lists (21)\r\n- [MUST] Linked List Cycle (141)\r\n- [MUST] Remove Nth Node From End (19)\r\n- [GOOD] Add Two Numbers (2)\r\n- [GOOD] Copy List with Random Pointer (138)\r\n- [GOOD] Merge K Sorted Lists (23)\r\n\r\n### Stacks\r\n- [MUST] Valid Parentheses (20) - revisit with stack\r\n- [MUST] Daily Temperatures (739)\r\n- [GOOD] Next Greater Element I (496)\r\n- [GOOD] Largest Rectangle in Histogram (84)\r\n\r\n### Queues\r\n- [GOOD] Design Circular Queue (622)\r\n- [GOOD] Moving Average from Data Stream (346)\r\n\r\n## Focus\r\n- Pointer manipulation (avoid losing references)\r\n- Dummy nodes to simplify edge cases\r\n- Stack for LIFO problems (matching, next greater)\r\n- Time complexity: O(n) for single pass\r\n",
+      "System_Design": "# System Design - Week 3\r\n\r\n## Core Concepts\r\n- Microservices architecture (pros/cons, service boundaries)\r\n- API Gateway (routing, authentication, rate limiting)\r\n- Service discovery (consul, etcd, zookeeper)\r\n- Distributed transactions (2PC, saga pattern)\r\n\r\n## Interview Focus Points\r\n- **Service decomposition**: When to split services\r\n- **Inter-service communication**: REST, gRPC, message queues\r\n- **Data consistency**: Distributed transactions vs eventual consistency\r\n- **Failure handling**: Circuit breakers, retries, timeouts\r\n\r\n## Practice\r\n- Design a microservices architecture (e-commerce basic)\r\n- Design an API Gateway\r\n- Design a distributed lock service\r\n\r\n## Reading\r\n- Microservices patterns (Martin Fowler)\r\n- Service mesh basics (Istio, Linkerd)\r\n- Event-driven architecture\r\n- Saga pattern for distributed transactions\r\n",
+      "Revision": "# Revision - Week 3\r\n\r\n## What to Revise\r\n- Week 1: Arrays, Two Pointers (spot check: 2 problems)\r\n- Week 2: Hash maps, Sliding Window (spot check: 2 problems)\r\n- Week 3: Linked Lists, Stacks, Queues (all [MUST] problems\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Linked list [MUST] problems (focus on pointer manipulation)\r\n2. **Day 2**: Stack problems (monotonic stack pattern)\r\n3. **Day 3**: Mixed review (1 problem from each week)\r\n4. **Day 4**: Re-solve [GOOD] problems from Week 3\r\n5. **Day 5**: Full mock interview (3 problems, 60 min)\r\n\r\n## Focus Areas\r\n- Linked list: Never lose pointer references\r\n- Stack: When to use (matching, next greater, monotonic)\r\n- Edge cases: Empty list, single node, null pointers\r\n- Space-time trade-offs (in-place vs extra space)\r\n\r\n## Common Mistakes to Avoid\r\n- Linked list: Modifying while iterating incorrectly\r\n- Stack: Not handling empty stack cases\r\n- Forgetting to update pointers in correct order\r\n- Not considering cycle detection in linked lists\r\n"
+    },
+    "4": {
+      "Behavioral": "# Behavioral - Week 4\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Project Management / Delivery\r\n- **Situation**: Tight deadline or scope change\r\n- **Task**: Deliver quality solution on time\r\n- **Action**: Prioritization, delegation, technical shortcuts (with trade-offs)\r\n- **Result**: On-time delivery, stakeholder satisfaction, lessons learned\r\n\r\n### Conflict Resolution\r\n- **Situation**: Technical disagreement or team conflict\r\n- **Task**: Resolve while maintaining relationships\r\n- **Action**: Data-driven discussion, compromise, escalation if needed\r\n- **Result**: Resolution, team cohesion, improved process\r\n\r\n### Innovation / Problem Solving\r\n- **Situation**: Unique technical challenge\r\n- **Task**: Find creative solution\r\n- **Action**: Research, experimentation, iteration\r\n- **Result**: Solution effectiveness, adoption, impact\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Delivered under pressure\r\n  - Disagreed with your manager/team\r\n  - Solved a problem with limited resources\r\n  - Improved a process or workflow\r\n  - Handled a difficult stakeholder\r\n\r\n## Preparation\r\n- Finalize all STAR stories (8-10 total)\r\n- Practice 90-second versions (interview format)\r\n- Prepare \"Why this company?\" answer\r\n- Prepare \"Why leave current role?\" (if applicable)\r\n- Research recent company news/products\r\n",
+      "DSA": "# DSA - Week 4\r\n\r\n## Topics (Order)\r\n1. Binary Trees (basics)\r\n2. Tree Traversals (DFS, BFS)\r\n3. Binary Search Trees\r\n4. Binary Search (on arrays)\r\n\r\n## Patterns to Learn\r\n- DFS (recursive, iterative with stack)\r\n- BFS (queue-based level order)\r\n- BST property (left < root < right)\r\n- Binary search template (left/right boundaries)\r\n\r\n## Problems (14 total)\r\n\r\n### Binary Trees\r\n- [MUST] Maximum Depth of Binary Tree (104)\r\n- [MUST] Same Tree (100)\r\n- [MUST] Invert Binary Tree (226)\r\n- [MUST] Binary Tree Level Order Traversal (102)\r\n- [GOOD] Symmetric Tree (101)\r\n- [GOOD] Path Sum (112)\r\n- [GOOD] Construct Binary Tree from Preorder and Inorder (105)\r\n\r\n### Binary Search Trees\r\n- [MUST] Validate Binary Search Tree (98)\r\n- [MUST] Search in a Binary Search Tree (700)\r\n- [GOOD] Insert into a Binary Search Tree (701)\r\n- [GOOD] Lowest Common Ancestor of BST (235)\r\n\r\n### Binary Search (Arrays)\r\n- [MUST] Binary Search (704)\r\n- [MUST] Search Insert Position (35)\r\n- [GOOD] Find First and Last Position (34)\r\n\r\n## Focus\r\n- Tree recursion base cases (null checks)\r\n- DFS vs BFS: when to use which\r\n- BST validation: range-based approach\r\n- Binary search: avoid off-by-one errors\r\n",
+      "System_Design": "# System Design - Week 4\r\n\r\n## Core Concepts\r\n- Distributed systems fundamentals (consensus, leader election)\r\n- Database transactions (isolation levels, locking)\r\n- Event sourcing and CQRS\r\n- Monitoring and observability (metrics, logs, traces)\r\n\r\n## Interview Focus Points\r\n- **Consistency models**: Strong consistency vs availability\r\n- **Partitioning strategies**: Range, hash, directory-based\r\n- **Monitoring**: What to measure (latency, throughput, error rate)\r\n- **Failure modes**: Network partitions, node failures, data corruption\r\n\r\n## Practice\r\n- Design a distributed file system (basic)\r\n- Design a search engine (basic indexing)\r\n- Design a recommendation system (basic)\r\n\r\n## Reading\r\n- CAP theorem deep dive\r\n- Distributed consensus (Raft, Paxos basics)\r\n- Database transaction isolation levels\r\n- Observability best practices\r\n",
+      "Revision": "# Revision - Week 4\r\n\r\n## What to Revise\r\n- **Full Month Review**: All topics from Weeks 1-4\r\n- **Priority**: [MUST] problems from all weeks\r\n- **Patterns**: Two pointers, hash maps, sliding window, stacks, trees\r\n- **Time Complexity**: Review O(n), O(n log n), O(log n) patterns\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Week 4 [MUST] problems (trees, BST, binary search)\r\n2. **Day 2**: Review all [MUST] problems from Weeks 1-3 (quick solve, 15 min each)\r\n3. **Day 3**: Pattern-based practice (pick 1 problem per pattern)\r\n4. **Day 4**: Mock interview simulation (3 problems, 60 min, random topics)\r\n5. **Day 5**: Weak area focus (identify gaps, deep dive)\r\n\r\n## Focus Areas\r\n- Tree traversals: Recursive vs iterative\r\n- Binary search: Template consistency\r\n- Pattern recognition: Identify problem type quickly\r\n- Code quality: Clean, readable, well-commented\r\n\r\n## Common Mistakes to Avoid\r\n- Tree: Not handling null nodes\r\n- Binary search: Infinite loops (boundary updates)\r\n- Forgetting base cases in recursion\r\n- Not optimizing after brute force\r\n\r\n## Month 1 Assessment\r\n- **Target**: Solve all [MUST] problems confidently\r\n- **Patterns**: Recognize and apply 5+ patterns\r\n- **Speed**: Solve medium problems in 25-30 min\r\n- **Next Month**: Graphs, Dynamic Programming, Advanced Trees\r\n"
+    }
+  },
+  "2": {
+    "1": {
+      "Behavioral": "# Behavioral - Week 1\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Technical Leadership\r\n- **Situation**: Leading a technical initiative or architecture decision\r\n- **Task**: Drive technical direction, get team alignment\r\n- **Action**: Research, proof of concept, documentation, team discussions\r\n- **Result**: Adoption, improved system quality, team growth\r\n\r\n### Code Review / Quality\r\n- **Situation**: Maintaining code quality at scale\r\n- **Task**: Establish or improve code review process\r\n- **Action**: Guidelines, automation, mentoring, examples\r\n- **Result**: Bug reduction, faster onboarding, consistent patterns\r\n\r\n### Cross-functional Collaboration\r\n- **Situation**: Working with product, design, or other teams\r\n- **Task**: Deliver feature with multiple stakeholders\r\n- **Action**: Communication, requirement clarification, technical feasibility\r\n- **Result**: Successful delivery, stakeholder satisfaction, relationship building\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Led a technical project\r\n  - Improved code quality standards\r\n  - Worked with non-technical stakeholders\r\n  - Made a technical decision that was later proven wrong\r\n  - Mentored someone technically\r\n\r\n## Preparation\r\n- Refine existing stories with technical depth\r\n- Add leadership-focused stories\r\n- Practice explaining technical concepts simply\r\n- Prepare follow-up questions about team culture\r\n",
+      "DSA": "# DSA - Week 1\r\n\r\n## Topics (Order)\r\n1. Graphs Basics (adjacency list, matrix)\r\n2. Graph Traversal (DFS, BFS)\r\n3. Cycle Detection\r\n4. Connected Components\r\n\r\n## Patterns to Learn\r\n- Graph DFS (recursive, iterative with stack)\r\n- Graph BFS (queue-based, shortest path)\r\n- Visited set/array for cycle detection\r\n- Union-Find (Disjoint Set) basics\r\n\r\n## Problems (13 total)\r\n\r\n### Graph Traversal\r\n- [MUST] Number of Islands (200)\r\n- [MUST] Clone Graph (133)\r\n- [MUST] Course Schedule (207)\r\n- [GOOD] Course Schedule II (210)\r\n- [GOOD] Word Ladder (127)\r\n\r\n### DFS on Graphs\r\n- [MUST] Max Area of Island (695)\r\n- [GOOD] Surrounded Regions (130)\r\n- [GOOD] Pacific Atlantic Water Flow (417)\r\n- [GOOD] Number of Connected Components (323)\r\n\r\n### BFS on Graphs\r\n- [MUST] Rotting Oranges (994)\r\n- [GOOD] Shortest Path in Binary Matrix (1091)\r\n- [GOOD] Open the Lock (752)\r\n\r\n### Cycle Detection\r\n- [GOOD] Graph Valid Tree (261)\r\n\r\n## Focus\r\n- Graph representation (adjacency list preferred)\r\n- DFS vs BFS: when to use (pathfinding, shortest path)\r\n- Cycle detection in directed vs undirected graphs\r\n- Time complexity: O(V + E) for adjacency list\r\n",
+      "System_Design": "# System Design - Week 1\r\n\r\n## Core Concepts\r\n- Database design (normalization, denormalization trade-offs)\r\n- SQL vs NoSQL selection criteria\r\n- Database query optimization (indexing, query plans)\r\n- ACID properties and transaction management\r\n\r\n## Interview Focus Points\r\n- **Schema design**: Tables, relationships, indexes\r\n- **Query optimization**: Slow query analysis, index selection\r\n- **Database scaling**: Read replicas, connection pooling\r\n- **Data modeling**: When to denormalize, aggregation strategies\r\n\r\n## Practice\r\n- Design a social media feed (basic)\r\n- Design a ticket booking system\r\n- Design a URL shortener (with analytics)\r\n\r\n## Reading\r\n- Database indexing strategies\r\n- SQL query optimization techniques\r\n- NoSQL database types (document, key-value, column, graph)\r\n- Database replication and consistency\r\n",
+      "Revision": "# Revision - Week 1\r\n\r\n## What to Revise\r\n- Month_1: Trees (DFS, BFS patterns) - foundation for graphs\r\n- Graph basics: Adjacency list vs matrix representation\r\n- Graph traversal: DFS and BFS implementations\r\n- Cycle detection: Directed vs undirected graphs\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Graph traversal [MUST] problems (Number of Islands, Clone Graph)\r\n2. **Day 2**: DFS/BFS variations (Course Schedule, Rotting Oranges)\r\n3. **Day 3**: Review Month_1 tree problems (connect to graph concepts)\r\n4. **Day 4**: Graph [GOOD] problems (time-boxed: 30 min each)\r\n5. **Day 5**: Mock interview: 2 graph problems, 45 min\r\n\r\n## Focus Areas\r\n- Graph representation: Choose adjacency list for sparse graphs\r\n- Visited tracking: Set vs array (trade-offs)\r\n- DFS recursion: Base cases, backtracking\r\n- BFS: Level-order traversal, shortest path applications\r\n\r\n## Common Mistakes to Avoid\r\n- Not marking nodes as visited before processing\r\n- Infinite loops in cycle detection\r\n- Wrong graph representation for problem type\r\n- Forgetting to handle disconnected components\r\n"
+    },
+    "2": {
+      "Behavioral": "# Behavioral - Week 2\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Performance Optimization\r\n- **Situation**: System performance bottleneck or scalability issue\r\n- **Task**: Identify and fix performance problems\r\n- **Action**: Profiling, bottleneck identification, optimization strategies\r\n- **Result**: Latency reduction, throughput increase, cost savings\r\n\r\n### Technical Debt Management\r\n- **Situation**: Accumulated technical debt affecting velocity\r\n- **Task**: Balance new features with refactoring\r\n- **Action**: Prioritization, incremental refactoring, team buy-in\r\n- **Result**: Improved velocity, reduced bugs, better maintainability\r\n\r\n### Innovation / Experimentation\r\n- **Situation**: Opportunity to try new technology or approach\r\n- **Task**: Evaluate and implement new solution\r\n- **Action**: Research, POC, risk assessment, gradual rollout\r\n- **Result**: Improved system, team learning, adoption success\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Optimized a slow system\r\n  - Managed technical debt\r\n  - Tried a new technology that failed\r\n  - Made a mistake in production\r\n  - Had to deprecate a system\r\n\r\n## Preparation\r\n- Add performance/optimization stories\r\n- Prepare failure stories (with lessons learned)\r\n- Practice explaining trade-offs clearly\r\n- Research company's tech stack, align stories\r\n",
+      "DSA": "# DSA - Week 2\r\n\r\n## Topics (Order)\r\n1. Dynamic Programming Basics\r\n2. 1D DP Problems\r\n3. 2D DP Problems\r\n4. DP Optimization (space)\r\n\r\n## Patterns to Learn\r\n- Memoization (top-down)\r\n- Tabulation (bottom-up)\r\n- State transition identification\r\n- Space optimization (reduce 2D to 1D)\r\n\r\n## Problems (14 total)\r\n\r\n### 1D DP\r\n- [MUST] Climbing Stairs (70)\r\n- [MUST] House Robber (198)\r\n- [MUST] Coin Change (322)\r\n- [MUST] Longest Increasing Subsequence (300)\r\n- [GOOD] Decode Ways (91)\r\n- [GOOD] Word Break (139)\r\n- [GOOD] Partition Equal Subset Sum (416)\r\n\r\n### 2D DP\r\n- [MUST] Unique Paths (62)\r\n- [MUST] Longest Common Subsequence (1143)\r\n- [MUST] Edit Distance (72)\r\n- [GOOD] Minimum Path Sum (64)\r\n- [GOOD] Coin Change 2 (518)\r\n- [GOOD] Target Sum (494)\r\n\r\n### DP on Strings\r\n- [GOOD] Longest Palindromic Subsequence (516)\r\n\r\n## Focus\r\n- Identify DP: overlapping subproblems, optimal substructure\r\n- Build recurrence relation first\r\n- Start with brute force, then optimize\r\n- Space optimization: only keep necessary states\r\n",
+      "System_Design": "# System Design - Week 2\r\n\r\n## Core Concepts\r\n- Distributed storage systems (object storage, block storage)\r\n- Content Delivery Network (CDN) architecture\r\n- Database sharding strategies (horizontal partitioning)\r\n- Data consistency patterns (strong, eventual, causal)\r\n\r\n## Interview Focus Points\r\n- **Sharding**: Hash-based, range-based, directory-based\r\n- **Replication**: Master-slave, master-master, multi-master\r\n- **Consistency**: CAP theorem trade-offs, quorum reads/writes\r\n- **CDN**: Edge caching, cache invalidation, geographic distribution\r\n\r\n## Practice\r\n- Design a distributed file storage (Dropbox-like)\r\n- Design a video streaming service (basic)\r\n- Design a distributed cache system\r\n\r\n## Reading\r\n- Consistent hashing\r\n- Database sharding patterns\r\n- CDN architecture and edge computing\r\n- Eventual consistency models\r\n",
+      "Revision": "# Revision - Week 2\r\n\r\n## What to Revise\r\n- Week 1: Graph traversal (quick review: 2 problems)\r\n- DP basics: Memoization vs tabulation\r\n- 1D DP: Climbing Stairs, House Robber, Coin Change\r\n- 2D DP: Unique Paths, LCS, Edit Distance\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: 1D DP [MUST] problems (focus on recurrence relations)\r\n2. **Day 2**: 2D DP [MUST] problems (table building, state transitions)\r\n3. **Day 3**: DP [GOOD] problems (variations and optimizations)\r\n4. **Day 4**: Mixed practice (1 graph + 1 DP problem)\r\n5. **Day 5**: Mock interview: 2 DP problems, 60 min\r\n\r\n## Focus Areas\r\n- DP identification: Overlapping subproblems, optimal substructure\r\n- Recurrence relation: Base cases, state transitions\r\n- Space optimization: Reduce 2D to 1D when possible\r\n- Bottom-up vs top-down: When to use which\r\n\r\n## Common Mistakes to Avoid\r\n- Not identifying DP pattern (trying greedy/backtracking first)\r\n- Incorrect base cases in DP table\r\n- Off-by-one errors in DP indices\r\n- Not optimizing space when possible\r\n"
+    },
+    "3": {
+      "Behavioral": "# Behavioral - Week 3\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Architecture / Design\r\n- **Situation**: System redesign or new architecture needed\r\n- **Task**: Design scalable, maintainable solution\r\n- **Action**: Requirements analysis, trade-offs, prototyping, documentation\r\n- **Result**: Improved scalability, reduced complexity, team adoption\r\n\r\n### Testing / Quality Assurance\r\n- **Situation**: Quality issues or need for better testing strategy\r\n- **Task**: Improve test coverage or quality processes\r\n- **Action**: Test strategy, automation, CI/CD integration\r\n- **Result**: Bug reduction, faster releases, confidence in deployments\r\n\r\n### Stakeholder Management\r\n- **Situation**: Managing expectations with product/business stakeholders\r\n- **Task**: Deliver on time while maintaining quality\r\n- **Action**: Communication, scope management, technical trade-offs\r\n- **Result**: Successful delivery, stakeholder trust, relationship building\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Designed a system architecture\r\n  - Improved testing or quality processes\r\n  - Had to say no to a feature request\r\n  - Dealt with scope creep\r\n  - Made a technical decision that affected the business\r\n\r\n## Preparation\r\n- Add architecture/design stories\r\n- Prepare examples of technical trade-offs\r\n- Practice explaining complex systems simply\r\n- Review company's engineering blog/articles\r\n",
+      "DSA": "# DSA - Week 3\r\n\r\n## Topics (Order)\r\n1. Heaps (Min/Max Heap)\r\n2. Priority Queues\r\n3. Trie (Prefix Tree)\r\n4. Advanced Tree Problems\r\n\r\n## Patterns to Learn\r\n- Heap operations (insert, extract, heapify)\r\n- K-th largest/smallest element pattern\r\n- Trie for string prefix matching\r\n- Tree serialization/deserialization\r\n\r\n## Problems (13 total)\r\n\r\n### Heaps\r\n- [MUST] Kth Largest Element in Array (215)\r\n- [MUST] Merge K Sorted Lists (23) - revisit with heap\r\n- [MUST] Top K Frequent Elements (347)\r\n- [GOOD] Find Median from Data Stream (295)\r\n- [GOOD] K Closest Points to Origin (973)\r\n- [GOOD] Task Scheduler (621)\r\n\r\n### Trie\r\n- [MUST] Implement Trie (208)\r\n- [MUST] Word Search II (212)\r\n- [GOOD] Add and Search Words (211)\r\n- [GOOD] Longest Word in Dictionary (720)\r\n\r\n### Advanced Trees\r\n- [GOOD] Serialize and Deserialize Binary Tree (297)\r\n- [GOOD] Binary Tree Maximum Path Sum (124)\r\n- [GOOD] Flatten Binary Tree to Linked List (114)\r\n\r\n## Focus\r\n- Heap: O(log n) insert/extract, O(n) build\r\n- Priority queue: Use for top K problems\r\n- Trie: O(m) search/insert where m is word length\r\n- Tree problems: Recursive thinking, path problems\r\n",
+      "System_Design": "# System Design - Week 3\r\n\r\n## Core Concepts\r\n- Search systems (inverted index, ranking algorithms)\r\n- Real-time systems (WebSockets, server-sent events)\r\n- Event-driven architecture (event sourcing, CQRS)\r\n- API design (REST, GraphQL, gRPC)\r\n\r\n## Interview Focus Points\r\n- **Search**: Indexing, ranking, relevance scoring\r\n- **Real-time**: Polling vs push, WebSocket scaling\r\n- **Event-driven**: Event ordering, idempotency, replay\r\n- **API design**: Versioning, backward compatibility, rate limiting\r\n\r\n## Practice\r\n- Design a search engine (basic indexing)\r\n- Design a real-time chat system\r\n- Design an API Gateway\r\n\r\n## Reading\r\n- Inverted index and search algorithms\r\n- WebSocket architecture and scaling\r\n- Event-driven patterns (Kafka, event sourcing)\r\n- API design best practices\r\n",
+      "Revision": "# Revision - Week 3\r\n\r\n## What to Revise\r\n- Week 1: Graphs (quick review: 1 problem)\r\n- Week 2: DP basics (quick review: 1 problem)\r\n- Week 3: Heaps, Trie, Advanced Trees (all [MUST] problems)\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Heap [MUST] problems (Kth Largest, Top K Frequent)\r\n2. **Day 2**: Trie problems (Implement Trie, Word Search II)\r\n3. **Day 3**: Advanced tree problems (serialization, path sum)\r\n4. **Day 4**: Mixed practice (1 heap + 1 trie problem)\r\n5. **Day 5**: Full mock interview (3 problems, 60 min, random topics)\r\n\r\n## Focus Areas\r\n- Heap: When to use (top K, median, scheduling)\r\n- Trie: String prefix matching, word search\r\n- Tree: Path problems, serialization patterns\r\n- Data structure selection: Heap vs sorting, Trie vs hash map\r\n\r\n## Common Mistakes to Avoid\r\n- Heap: Not maintaining heap property after operations\r\n- Trie: Not handling word endings correctly\r\n- Tree: Not considering null cases in serialization\r\n- Choosing wrong data structure for problem type\r\n"
+    },
+    "4": {
+      "Behavioral": "# Behavioral - Week 4\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Problem Solving / Debugging\r\n- **Situation**: Complex production bug or system issue\r\n- **Task**: Debug and fix under pressure\r\n- **Action**: Systematic debugging, log analysis, hypothesis testing\r\n- **Result**: Resolution time, system stability, process improvements\r\n\r\n### Process Improvement\r\n- **Situation**: Inefficient process or workflow\r\n- **Task**: Improve team efficiency or quality\r\n- **Action**: Identify bottlenecks, propose solutions, implement changes\r\n- **Result**: Time saved, quality improved, team adoption\r\n\r\n### Handling Ambiguity\r\n- **Situation**: Unclear requirements or changing scope\r\n- **Task**: Deliver solution with incomplete information\r\n- **Action**: Ask clarifying questions, make assumptions, iterate\r\n- **Result**: Successful delivery, stakeholder satisfaction\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Debugged a difficult production issue\r\n  - Improved a process or workflow\r\n  - Worked with ambiguous requirements\r\n  - Had to learn something quickly\r\n  - Dealt with a difficult customer/stakeholder\r\n\r\n## Preparation\r\n- Finalize all STAR stories (10-12 total)\r\n- Practice 2-min versions (interview format)\r\n- Prepare \"Why this role?\" answer\r\n- Prepare questions about team structure, growth opportunities\r\n- Research interviewer's background (if known)\r\n",
+      "DSA": "# DSA - Week 4\r\n\r\n## Topics (Order)\r\n1. Greedy Algorithms\r\n2. Backtracking\r\n3. Advanced Graph Problems\r\n4. Interval Problems\r\n\r\n## Patterns to Learn\r\n- Greedy choice property\r\n- Backtracking template (choose, explore, unchoose)\r\n- Interval sorting and merging\r\n- Topological sort (graph)\r\n\r\n## Problems (14 total)\r\n\r\n### Greedy\r\n- [MUST] Jump Game (55)\r\n- [MUST] Merge Intervals (56)\r\n- [MUST] Non-overlapping Intervals (435)\r\n- [GOOD] Gas Station (134)\r\n- [GOOD] Partition Labels (763)\r\n- [GOOD] Maximum Units on a Truck (1710)\r\n\r\n### Backtracking\r\n- [MUST] Subsets (78)\r\n- [MUST] Combination Sum (39)\r\n- [MUST] Permutations (46)\r\n- [GOOD] Word Search (79)\r\n- [GOOD] N-Queens (51)\r\n- [GOOD] Generate Parentheses (22)\r\n\r\n### Advanced Graphs\r\n- [GOOD] Network Delay Time (743)\r\n- [GOOD] Cheapest Flights Within K Stops (787)\r\n\r\n## Focus\r\n- Greedy: Prove greedy choice is optimal\r\n- Backtracking: State space tree, pruning\r\n- Interval: Sort by start or end, merge logic\r\n- Graph: Shortest path variations (Dijkstra basics)\r\n",
+      "System_Design": "# System Design - Week 4\r\n\r\n## Core Concepts\r\n- Distributed consensus (Raft, Paxos basics)\r\n- Distributed locking and leader election\r\n- Monitoring and observability (metrics, logs, traces)\r\n- Security and authentication (OAuth, JWT, API keys)\r\n\r\n## Interview Focus Points\r\n- **Consensus**: Leader election, fault tolerance\r\n- **Distributed locks**: Redis, Zookeeper, etcd\r\n- **Observability**: What to monitor, alerting strategies\r\n- **Security**: Authentication, authorization, rate limiting, encryption\r\n\r\n## Practice\r\n- Design a distributed lock service\r\n- Design a monitoring/alerting system\r\n- Design an authentication system\r\n\r\n## Reading\r\n- Raft consensus algorithm basics\r\n- Distributed locking patterns\r\n- Observability best practices (three pillars)\r\n- Security best practices for APIs\r\n",
+      "Revision": "# Revision - Week 4\r\n\r\n## What to Revise\r\n- **Full Month Review**: All topics from Weeks 1-4\r\n- **Priority**: [MUST] problems from all weeks\r\n- **Patterns**: Graphs, DP, Heaps, Trie, Greedy, Backtracking\r\n- **Time Complexity**: Review O(V+E), O(n²), O(n log n) patterns\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Week 4 [MUST] problems (Greedy, Backtracking)\r\n2. **Day 2**: Review all [MUST] problems from Weeks 1-3 (quick solve, 20 min each)\r\n3. **Day 3**: Pattern-based practice (1 problem per major pattern)\r\n4. **Day 4**: Mock interview simulation (3 problems, 60 min, random topics)\r\n5. **Day 5**: Weak area focus (identify gaps, deep dive)\r\n\r\n## Focus Areas\r\n- Greedy: When to use (optimal substructure, greedy choice)\r\n- Backtracking: Template consistency, pruning strategies\r\n- Pattern recognition: Identify problem type quickly\r\n- Code quality: Clean, readable, well-structured\r\n\r\n## Common Mistakes to Avoid\r\n- Greedy: Not proving optimality, using when DP needed\r\n- Backtracking: Not unchoosing (backtracking) correctly\r\n- Graph: Not handling disconnected components\r\n- Not optimizing after brute force solution\r\n\r\n## Month 2 Assessment\r\n- **Target**: Solve all [MUST] problems confidently\r\n- **Patterns**: Recognize and apply 8+ patterns\r\n- **Speed**: Solve medium problems in 20-25 min\r\n- **Next Month**: Advanced DP, Advanced Graphs, System Design deep dive\r\n"
+    }
+  },
+  "3": {
+    "1": {
+      "Behavioral": "# Behavioral - Week 1\r\n\r\n## STAR Stories to Prepare\r\n\r\n### System Design / Architecture\r\n- **Situation**: Large-scale system design or redesign project\r\n- **Task**: Design scalable, reliable architecture\r\n- **Action**: Requirements gathering, trade-off analysis, architecture decisions\r\n- **Result**: System scalability, reliability metrics, cost optimization\r\n\r\n### Performance at Scale\r\n- **Situation**: System performance issues at scale\r\n- **Task**: Optimize for millions of users/requests\r\n- **Action**: Profiling, bottleneck identification, optimization strategies\r\n- **Result**: Latency reduction, throughput increase, cost savings\r\n\r\n### Technical Decision Making\r\n- **Situation**: Critical technical decision with multiple options\r\n- **Task**: Choose best solution considering trade-offs\r\n- **Action**: Research, POC, cost-benefit analysis, team discussion\r\n- **Result**: Successful implementation, lessons learned\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Designed a system handling millions of requests\r\n  - Optimized a system for scale\r\n  - Made a critical architecture decision\r\n  - Handled a system migration\r\n  - Worked on a high-traffic system\r\n\r\n## Preparation\r\n- Refine system design stories with scale numbers\r\n- Practice explaining architecture decisions\r\n- Prepare examples of trade-offs (consistency vs availability)\r\n- Research company's scale and challenges\r\n",
+      "DSA": "# DSA - Week 1\r\n\r\n## Topics (Order)\r\n1. Advanced Dynamic Programming\r\n2. DP on Strings\r\n3. DP on Trees\r\n4. State Machine DP\r\n\r\n## Patterns to Learn\r\n- DP with multiple states\r\n- String DP (palindrome, subsequence)\r\n- Tree DP (bottom-up, top-down)\r\n- State transitions in DP\r\n\r\n## Problems (14 total)\r\n\r\n### Advanced DP\r\n- [MUST] Best Time to Buy and Sell Stock III (123)\r\n- [MUST] Longest Palindromic Substring (5) - DP approach\r\n- [MUST] Decode Ways (91) - revisit\r\n- [GOOD] Best Time to Buy and Sell Stock IV (188)\r\n- [GOOD] Burst Balloons (312)\r\n- [GOOD] Palindrome Partitioning II (132)\r\n\r\n### DP on Strings\r\n- [MUST] Longest Common Subsequence (1143) - revisit\r\n- [MUST] Edit Distance (72) - revisit\r\n- [GOOD] Interleaving String (97)\r\n- [GOOD] Distinct Subsequences (115)\r\n- [GOOD] Regular Expression Matching (10)\r\n\r\n### DP on Trees\r\n- [GOOD] House Robber III (337)\r\n- [GOOD] Binary Tree Maximum Path Sum (124) - revisit\r\n\r\n### State Machine DP\r\n- [GOOD] Best Time to Buy and Sell Stock with Cooldown (309)\r\n\r\n## Focus\r\n- DP optimization: Reduce states, optimize space\r\n- String DP: 2D table, character matching\r\n- Tree DP: Post-order traversal, return multiple values\r\n- State machine: Track multiple states simultaneously\r\n",
+      "System_Design": "# System Design - Week 1\r\n\r\n## Core Concepts\r\n- Large-scale system design principles\r\n- Load balancing algorithms (consistent hashing)\r\n- Database scaling (sharding, replication)\r\n- Caching strategies (multi-level caching)\r\n\r\n## Interview Focus Points\r\n- **Scale estimation**: Users, QPS, storage, bandwidth calculations\r\n- **Load balancing**: Layer 4 vs Layer 7, health checks\r\n- **Database design**: Read/write splitting, eventual consistency\r\n- **Caching layers**: CDN, application cache, database cache hierarchy\r\n\r\n## Practice\r\n- Design Twitter (basic feed, timeline)\r\n- Design Instagram (photo sharing, feed)\r\n- Design Uber (ride matching, location tracking)\r\n\r\n## Reading\r\n- System design primer (scalability, reliability)\r\n- Consistent hashing deep dive\r\n- Database replication strategies\r\n- Caching patterns and strategies\r\n",
+      "Revision": "# Revision - Week 1\r\n\r\n## What to Revise\r\n- Month_1: Arrays, Trees, Binary Search (foundation)\r\n- Month_2: Basic DP (1D, 2D) - foundation for advanced DP\r\n- Advanced DP: Multiple states, string DP, tree DP\r\n- State machine patterns\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Advanced DP [MUST] problems (multiple states)\r\n2. **Day 2**: String DP problems (2D table building)\r\n3. **Day 3**: Review Month_2 DP basics (quick refresh)\r\n4. **Day 4**: DP [GOOD] problems (optimizations)\r\n5. **Day 5**: Mock interview: 2 advanced DP problems, 60 min\r\n\r\n## Focus Areas\r\n- DP state identification: What states to track\r\n- String DP: Table initialization, character matching logic\r\n- Tree DP: Bottom-up vs top-down, return values\r\n- Optimization: Space reduction, state reduction\r\n\r\n## Common Mistakes to Avoid\r\n- Not identifying all necessary states\r\n- Incorrect table initialization in string DP\r\n- Tree DP: Not handling null cases correctly\r\n- Not optimizing space when possible\r\n"
+    },
+    "2": {
+      "Behavioral": "# Behavioral - Week 2\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Distributed Systems\r\n- **Situation**: Distributed system challenge or failure\r\n- **Task**: Design or fix distributed system component\r\n- **Action**: Consensus algorithms, fault tolerance, monitoring\r\n- **Result**: System reliability, availability metrics\r\n\r\n### Data Consistency\r\n- **Situation**: Data consistency challenge in distributed system\r\n- **Task**: Ensure data consistency across services\r\n- **Action**: Transaction design, eventual consistency patterns\r\n- **Result**: Consistency guarantees, system reliability\r\n\r\n### System Reliability\r\n- **Situation**: System reliability or availability issues\r\n- **Task**: Improve system uptime and fault tolerance\r\n- **Action**: Redundancy, monitoring, failover strategies\r\n- **Result**: Uptime improvement, MTTR reduction\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Worked on a distributed system\r\n  - Handled data consistency issues\r\n  - Improved system reliability\r\n  - Designed for fault tolerance\r\n  - Worked with message queues or event systems\r\n\r\n## Preparation\r\n- Add distributed systems stories\r\n- Practice explaining consensus and consistency\r\n- Prepare examples of CAP theorem trade-offs\r\n- Research company's distributed systems challenges\r\n",
+      "DSA": "# DSA - Week 2\r\n\r\n## Topics (Order)\r\n1. Advanced Graph Algorithms\r\n2. Shortest Path (Dijkstra, Bellman-Ford basics)\r\n3. Minimum Spanning Tree (Kruskal, Prim basics)\r\n4. Union-Find (Disjoint Set)\r\n\r\n## Patterns to Learn\r\n- Dijkstra's algorithm (greedy shortest path)\r\n- Union-Find for connectivity\r\n- MST algorithms (Kruskal, Prim)\r\n- Graph coloring\r\n\r\n## Problems (13 total)\r\n\r\n### Shortest Path\r\n- [MUST] Network Delay Time (743) - revisit\r\n- [MUST] Cheapest Flights Within K Stops (787) - revisit\r\n- [GOOD] Path With Minimum Effort (1631)\r\n- [GOOD] Shortest Path in a Grid with Obstacles (1293)\r\n\r\n### Union-Find\r\n- [MUST] Number of Islands (200) - Union-Find approach\r\n- [MUST] Redundant Connection (684)\r\n- [GOOD] Accounts Merge (721)\r\n- [GOOD] Number of Operations to Make Network Connected (1319)\r\n\r\n### MST / Graph Algorithms\r\n- [GOOD] Connecting Cities With Minimum Cost (1135)\r\n- [GOOD] Critical Connections in a Network (1192)\r\n- [GOOD] Course Schedule (207) - revisit with topological sort\r\n\r\n### Graph Coloring\r\n- [GOOD] Is Graph Bipartite? (785)\r\n\r\n## Focus\r\n- Dijkstra: Priority queue, relaxation\r\n- Union-Find: Path compression, union by rank\r\n- MST: When to use (connectivity, minimum cost)\r\n- Graph algorithms: Time complexity analysis\r\n",
+      "System_Design": "# System Design - Week 2\r\n\r\n## Core Concepts\r\n- Distributed systems (consensus, fault tolerance)\r\n- Message queues (Kafka, RabbitMQ patterns)\r\n- Event-driven architecture (event sourcing, CQRS)\r\n- Microservices communication patterns\r\n\r\n## Interview Focus Points\r\n- **Message queues**: Pub/sub, point-to-point, ordering guarantees\r\n- **Event-driven**: Event ordering, idempotency, replay capability\r\n- **Service communication**: Synchronous vs asynchronous, retry strategies\r\n- **Fault tolerance**: Circuit breakers, bulkheads, timeouts\r\n\r\n## Practice\r\n- Design a distributed message queue\r\n- Design an event-driven system\r\n- Design a notification system at scale\r\n\r\n## Reading\r\n- Kafka architecture and patterns\r\n- Event sourcing and CQRS patterns\r\n- Microservices communication patterns\r\n- Distributed system patterns\r\n",
+      "Revision": "# Revision - Week 2\r\n\r\n## What to Revise\r\n- Week 1: Advanced DP (quick review: 1 problem)\r\n- Graph basics: DFS, BFS from Month_2\r\n- Advanced graph algorithms: Shortest path, Union-Find\r\n- MST algorithms\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Shortest path [MUST] problems (Dijkstra pattern)\r\n2. **Day 2**: Union-Find problems (connectivity, cycles)\r\n3. **Day 3**: Graph algorithm [GOOD] problems\r\n4. **Day 4**: Mixed practice (1 DP + 1 graph problem)\r\n5. **Day 5**: Mock interview: 2 graph problems, 60 min\r\n\r\n## Focus Areas\r\n- Dijkstra: Priority queue implementation, relaxation\r\n- Union-Find: Path compression, union by rank optimization\r\n- Graph representation: Choose appropriate structure\r\n- Algorithm selection: When to use which algorithm\r\n\r\n## Common Mistakes to Avoid\r\n- Dijkstra: Not handling negative weights (use Bellman-Ford)\r\n- Union-Find: Not optimizing (path compression, union by rank)\r\n- Graph: Not considering disconnected components\r\n- Incorrect time complexity analysis\r\n"
+    },
+    "3": {
+      "Behavioral": "# Behavioral - Week 3\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Data Processing / Analytics\r\n- **Situation**: Large-scale data processing challenge\r\n- **Task**: Process, analyze, or transform large datasets\r\n- **Action**: Data pipeline design, optimization, tool selection\r\n- **Result**: Processing time reduction, insights delivered\r\n\r\n### Search / Recommendation\r\n- **Situation**: Search or recommendation system project\r\n- **Task**: Build or improve search/recommendation quality\r\n- **Action**: Algorithm selection, indexing, ranking optimization\r\n- **Result**: Relevance improvement, user engagement metrics\r\n\r\n### Real-time Systems\r\n- **Situation**: Real-time data processing requirement\r\n- **Task**: Build low-latency data processing system\r\n- **Action**: Stream processing, architecture design, optimization\r\n- **Result**: Latency reduction, throughput increase\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Worked with large datasets\r\n  - Built a search or recommendation feature\r\n  - Optimized data processing performance\r\n  - Worked on real-time systems\r\n  - Made data-driven decisions\r\n\r\n## Preparation\r\n- Add data/analytics stories\r\n- Practice explaining algorithms simply\r\n- Prepare examples of performance optimizations\r\n- Research company's data challenges\r\n",
+      "DSA": "# DSA - Week 3\r\n\r\n## Topics (Order)\r\n1. Advanced String Algorithms\r\n2. Sliding Window Advanced\r\n3. Two Pointers Advanced\r\n4. String Matching (KMP basics)\r\n\r\n## Patterns to Learn\r\n- Advanced sliding window (multiple constraints)\r\n- Two pointers with conditions\r\n- String matching (Rabin-Karp, KMP basics)\r\n- String parsing and manipulation\r\n\r\n## Problems (14 total)\r\n\r\n### Advanced Sliding Window\r\n- [MUST] Minimum Window Substring (76) - revisit\r\n- [MUST] Substring with Concatenation of All Words (30)\r\n- [GOOD] Longest Substring with At Most K Distinct Characters (340)\r\n- [GOOD] Minimum Size Subarray Sum (209)\r\n- [GOOD] Sliding Window Maximum (239)\r\n\r\n### Advanced Two Pointers\r\n- [MUST] Trapping Rain Water (42) - revisit\r\n- [GOOD] Container With Most Water (11) - revisit\r\n- [GOOD] 4Sum (18)\r\n- [GOOD] Remove Duplicates from Sorted Array II (80)\r\n\r\n### String Algorithms\r\n- [MUST] Longest Palindromic Substring (5) - revisit\r\n- [GOOD] Implement strStr() (28)\r\n- [GOOD] Repeated DNA Sequences (187)\r\n- [GOOD] Basic Calculator (224)\r\n\r\n### String Parsing\r\n- [GOOD] Decode String (394) - revisit\r\n- [GOOD] Simplify Path (71)\r\n\r\n## Focus\r\n- Sliding window: Multiple constraints, variable window\r\n- Two pointers: Complex conditions, multiple arrays\r\n- String algorithms: Pattern matching, parsing\r\n- Time complexity: O(n) for single pass problems\r\n",
+      "System_Design": "# System Design - Week 3\r\n\r\n## Core Concepts\r\n- Search and indexing systems\r\n- Recommendation systems\r\n- Analytics and data processing\r\n- Real-time data processing\r\n\r\n## Interview Focus Points\r\n- **Search**: Inverted index, ranking algorithms, relevance\r\n- **Recommendations**: Collaborative filtering, content-based, hybrid\r\n- **Analytics**: Data pipeline, ETL, batch vs stream processing\r\n- **Real-time**: Stream processing, windowing, aggregations\r\n\r\n## Practice\r\n- Design a search engine (Google-like)\r\n- Design a recommendation system (Netflix-like)\r\n- Design a real-time analytics system\r\n\r\n## Reading\r\n- Search engine architecture\r\n- Recommendation algorithms\r\n- Stream processing (Kafka Streams, Flink)\r\n- Data pipeline design\r\n",
+      "Revision": "# Revision - Week 3\r\n\r\n## What to Revise\r\n- Week 1: Advanced DP (quick review)\r\n- Week 2: Graph algorithms (quick review)\r\n- Week 3: Advanced string algorithms, sliding window\r\n- Two pointers patterns\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Advanced sliding window [MUST] problems\r\n2. **Day 2**: String algorithm problems\r\n3. **Day 3**: Review Month_1 string/array basics\r\n4. **Day 4**: Mixed practice (string + array problems)\r\n5. **Day 5**: Mock interview: 2 string/array problems, 45 min\r\n\r\n## Focus Areas\r\n- Sliding window: Multiple constraints, optimization\r\n- String algorithms: Pattern matching, parsing\r\n- Two pointers: Complex conditions\r\n- Edge cases: Empty strings, special characters\r\n\r\n## Common Mistakes to Avoid\r\n- Sliding window: Not updating window correctly\r\n- String: Not handling Unicode/edge cases\r\n- Two pointers: Off-by-one errors\r\n- Not optimizing after brute force\r\n"
+    },
+    "4": {
+      "Behavioral": "# Behavioral - Week 4\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Security / Compliance\r\n- **Situation**: Security requirement or compliance challenge\r\n- **Task**: Implement security measures or meet compliance\r\n- **Action**: Security design, encryption, access control, audits\r\n- **Result**: Security compliance, vulnerability reduction\r\n\r\n### Storage / Infrastructure\r\n- **Situation**: Storage or infrastructure scaling challenge\r\n- **Task**: Design or scale storage/infrastructure system\r\n- **Action**: Architecture design, tool selection, migration\r\n- **Result**: Scalability achieved, cost optimization\r\n\r\n### API Design / Integration\r\n- **Situation**: API design or third-party integration project\r\n- **Task**: Design API or integrate external services\r\n- **Action**: API design, documentation, versioning, testing\r\n- **Result**: API adoption, integration success, developer experience\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Worked on security or compliance\r\n  - Designed or scaled infrastructure\r\n  - Designed an API\r\n  - Integrated third-party services\r\n  - Handled a security incident\r\n\r\n## Preparation\r\n- Add security/infrastructure stories\r\n- Practice explaining technical concepts\r\n- Prepare examples of API design decisions\r\n- Research company's security/infrastructure focus\r\n",
+      "DSA": "# DSA - Week 4\r\n\r\n## Topics (Order)\r\n1. Advanced Tree Problems\r\n2. Segment Trees (basics)\r\n3. Binary Indexed Tree (Fenwick Tree basics)\r\n4. Tree Serialization Advanced\r\n\r\n## Patterns to Learn\r\n- Segment tree (range queries)\r\n- Binary Indexed Tree (prefix sums)\r\n- Tree construction from traversals\r\n- Tree path problems\r\n\r\n## Problems (13 total)\r\n\r\n### Advanced Trees\r\n- [MUST] Serialize and Deserialize Binary Tree (297) - revisit\r\n- [MUST] Construct Binary Tree from Preorder and Inorder (105) - revisit\r\n- [GOOD] Binary Tree Maximum Path Sum (124) - revisit\r\n- [GOOD] Binary Tree Zigzag Level Order Traversal (103)\r\n- [GOOD] Populating Next Right Pointers in Each Node (116)\r\n\r\n### Tree Construction\r\n- [GOOD] Construct Binary Tree from Inorder and Postorder (106)\r\n- [GOOD] Construct Binary Search Tree from Preorder (1008)\r\n- [GOOD] Recover Binary Search Tree (99)\r\n\r\n### Tree Path Problems\r\n- [GOOD] Path Sum II (113)\r\n- [GOOD] Path Sum III (437)\r\n- [GOOD] Sum Root to Leaf Numbers (129)\r\n\r\n### Segment Tree Basics\r\n- [GOOD] Range Sum Query - Mutable (307)\r\n- [GOOD] Count of Smaller Numbers After Self (315)\r\n\r\n## Focus\r\n- Tree construction: Inorder + Preorder/Postorder\r\n- Path problems: DFS with backtracking\r\n- Segment tree: Range query updates\r\n- Tree serialization: Multiple formats\r\n",
+      "System_Design": "# System Design - Week 4\r\n\r\n## Core Concepts\r\n- Storage systems (object storage, block storage)\r\n- Content delivery and CDN\r\n- Rate limiting and throttling\r\n- Security and authentication at scale\r\n\r\n## Interview Focus Points\r\n- **Storage**: Object storage vs block storage, durability\r\n- **CDN**: Edge caching, cache invalidation, geographic distribution\r\n- **Rate limiting**: Token bucket, sliding window, distributed rate limiting\r\n- **Security**: OAuth, JWT, API security, encryption at rest/transit\r\n\r\n## Practice\r\n- Design a file storage system (Dropbox-like)\r\n- Design a CDN\r\n- Design an authentication/authorization system\r\n\r\n## Reading\r\n- Object storage architecture (S3-like)\r\n- CDN architecture and edge computing\r\n- Rate limiting algorithms\r\n- Security best practices for APIs\r\n",
+      "Revision": "# Revision - Week 4\r\n\r\n## What to Revise\r\n- **Full Month Review**: Advanced DP, Advanced Graphs, String Algorithms, Advanced Trees\r\n- **Priority**: [MUST] problems from all weeks\r\n- **Patterns**: All patterns from Months 1-3\r\n- **Time Complexity**: Review all complexity classes\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Week 4 [MUST] problems (advanced trees)\r\n2. **Day 2**: Review all [MUST] problems from Weeks 1-3 (quick solve)\r\n3. **Day 3**: Pattern-based practice (1 problem per major pattern)\r\n4. **Day 4**: Mock interview simulation (3 problems, 75 min)\r\n5. **Day 5**: Weak area focus and Month 3 assessment\r\n\r\n## Focus Areas\r\n- Advanced trees: Construction, serialization, path problems\r\n- Pattern recognition: Quick identification\r\n- Code quality: Production-ready code\r\n- Optimization: Time and space optimization\r\n\r\n## Common Mistakes to Avoid\r\n- Tree construction: Incorrect index handling\r\n- Not considering all edge cases\r\n- Over-optimizing before brute force\r\n- Not explaining approach clearly\r\n\r\n## Month 3 Assessment\r\n- **Target**: Solve hard problems in 40-45 min\r\n- **Patterns**: Recognize and apply 12+ patterns\r\n- **System Design**: Design large-scale systems confidently\r\n- **Next Month**: Mock interviews, company-specific prep, advanced topics\r\n"
+    }
+  },
+  "4": {
+    "1": {
+      "Behavioral": "# Behavioral - Week 1\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Optimization / Performance\r\n- **Situation**: Performance bottleneck or optimization opportunity\r\n- **Task**: Optimize system performance\r\n- **Action**: Profiling, bottleneck identification, optimization\r\n- **Result**: Latency reduction, throughput increase, cost savings\r\n\r\n### Database / Data\r\n- **Situation**: Database performance or data challenge\r\n- **Task**: Optimize database or handle data at scale\r\n- **Action**: Query optimization, indexing, data modeling\r\n- **Result**: Query time reduction, scalability improvement\r\n\r\n### Monitoring / Observability\r\n- **Situation**: Need for better monitoring or observability\r\n- **Task**: Implement monitoring/observability solution\r\n- **Action**: Tool selection, metric definition, alerting setup\r\n- **Result**: Visibility improvement, faster incident detection\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Optimized database performance\r\n  - Implemented monitoring or observability\r\n  - Improved system performance significantly\r\n  - Handled a data migration\r\n  - Optimized query performance\r\n\r\n## Preparation\r\n- Add optimization/performance stories\r\n- Practice explaining technical optimizations\r\n- Prepare examples of performance improvements\r\n- Research company's performance challenges\r\n",
+      "DSA": "# DSA - Week 1\r\n\r\n## Topics (Order)\r\n1. Bit Manipulation\r\n2. Math and Number Theory\r\n3. Geometry Basics\r\n4. Combinatorics Basics\r\n\r\n## Patterns to Learn\r\n- Bitwise operations (AND, OR, XOR, shifts)\r\n- Power of 2, number of set bits\r\n- Prime numbers, GCD, LCM\r\n- Permutations and combinations\r\n\r\n## Problems (13 total)\r\n\r\n### Bit Manipulation\r\n- [MUST] Single Number (136)\r\n- [MUST] Number of 1 Bits (191)\r\n- [MUST] Reverse Bits (190)\r\n- [GOOD] Single Number II (137)\r\n- [GOOD] Single Number III (260)\r\n- [GOOD] Power of Two (231)\r\n- [GOOD] Missing Number (268)\r\n\r\n### Math\r\n- [MUST] Pow(x, n) (50)\r\n- [GOOD] Sqrt(x) (69)\r\n- [GOOD] Divide Two Integers (29)\r\n- [GOOD] Happy Number (202)\r\n\r\n### Number Theory\r\n- [GOOD] Count Primes (204)\r\n- [GOOD] Greatest Common Divisor (GCD)\r\n\r\n## Focus\r\n- Bit manipulation: XOR properties, bit masks\r\n- Math: Fast exponentiation, binary search for sqrt\r\n- Number theory: Sieve of Eratosthenes, Euclidean algorithm\r\n- Time complexity: O(1) for bit ops, O(log n) for math\r\n",
+      "System_Design": "# System Design - Week 1\r\n\r\n## Core Concepts\r\n- Design patterns for large-scale systems\r\n- Database optimization (query optimization, indexing)\r\n- Caching strategies (write-through, write-back, write-around)\r\n- Monitoring and alerting systems\r\n\r\n## Interview Focus Points\r\n- **Database optimization**: Query plans, index selection, slow query analysis\r\n- **Caching**: Cache invalidation strategies, cache warming\r\n- **Monitoring**: Metrics, logs, traces, alerting thresholds\r\n- **Performance**: Latency optimization, throughput improvement\r\n\r\n## Practice\r\n- Design a monitoring system\r\n- Design a caching layer\r\n- Design a database optimization strategy\r\n\r\n## Reading\r\n- Database query optimization\r\n- Caching strategies and patterns\r\n- Observability (metrics, logs, traces)\r\n- Performance optimization techniques\r\n",
+      "Revision": "# Revision - Week 1\r\n\r\n## What to Revise\r\n- Months 1-3: All core patterns (quick review)\r\n- Bit manipulation: XOR properties, bit masks\r\n- Math: Fast exponentiation, binary search\r\n- Number theory: Prime algorithms, GCD\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Bit manipulation [MUST] problems\r\n2. **Day 2**: Math problems (power, sqrt, division)\r\n3. **Day 3**: Review core patterns from Months 1-3\r\n4. **Day 4**: Mixed practice (bit + math problems)\r\n5. **Day 5**: Mock interview: 2 problems, 45 min\r\n\r\n## Focus Areas\r\n- Bit manipulation: XOR tricks, bit masks\r\n- Math: Binary search for sqrt, fast exponentiation\r\n- Edge cases: Negative numbers, overflow\r\n- Time complexity: Optimize to O(log n) or O(1)\r\n\r\n## Common Mistakes to Avoid\r\n- Bit manipulation: Not handling negative numbers correctly\r\n- Math: Integer overflow in calculations\r\n- Not using bit tricks when applicable\r\n- Incorrect time complexity analysis\r\n"
+    },
+    "2": {
+      "Behavioral": "# Behavioral - Week 2\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Code Review / Quality\r\n- **Situation**: Code quality or review process challenge\r\n- **Task**: Improve code quality or review process\r\n- **Action**: Guidelines, automation, mentoring, examples\r\n- **Result**: Bug reduction, faster onboarding, quality improvement\r\n\r\n### Technical Leadership\r\n- **Situation**: Leading technical initiative or team\r\n- **Task**: Drive technical direction, mentor team\r\n- **Action**: Architecture decisions, knowledge sharing, mentoring\r\n- **Result**: Team growth, technical excellence, project success\r\n\r\n### Process Improvement\r\n- **Situation**: Inefficient development or deployment process\r\n- **Task**: Improve team efficiency or quality\r\n- **Action**: Process analysis, tool selection, automation\r\n- **Result**: Time saved, quality improved, team satisfaction\r\n\r\n## Question Themes\r\n- \"Tell me about a time you...\"\r\n  - Improved code review process\r\n  - Mentored a junior developer\r\n  - Led a technical initiative\r\n  - Improved development workflow\r\n  - Established technical standards\r\n\r\n## Preparation\r\n- Add leadership/mentoring stories\r\n- Practice explaining technical concepts simply\r\n- Prepare examples of process improvements\r\n- Research company's engineering culture\r\n",
+      "DSA": "# DSA - Week 2\r\n\r\n## Topics (Order)\r\n1. Advanced Backtracking\r\n2. Recursion Advanced\r\n3. Divide and Conquer\r\n4. Advanced Greedy\r\n\r\n## Patterns to Learn\r\n- Backtracking with pruning\r\n- Memoization in recursion\r\n- Divide and conquer template\r\n- Greedy with proof\r\n\r\n## Problems (14 total)\r\n\r\n### Advanced Backtracking\r\n- [MUST] N-Queens (51) - revisit\r\n- [MUST] Sudoku Solver (37)\r\n- [GOOD] Word Search II (212) - revisit\r\n- [GOOD] Restore IP Addresses (93)\r\n- [GOOD] Palindrome Partitioning (131)\r\n\r\n### Recursion Advanced\r\n- [MUST] Generate Parentheses (22) - revisit\r\n- [GOOD] Letter Combinations of a Phone Number (17)\r\n- [GOOD] Combination Sum II (40)\r\n- [GOOD] Permutations II (47)\r\n\r\n### Divide and Conquer\r\n- [MUST] Merge Sort (912)\r\n- [MUST] Quick Sort (912)\r\n- [GOOD] Kth Largest Element (215) - D&C approach\r\n- [GOOD] Count of Smaller Numbers After Self (315) - D&C\r\n\r\n### Advanced Greedy\r\n- [GOOD] Jump Game II (45)\r\n- [GOOD] Candy (135)\r\n\r\n## Focus\r\n- Backtracking: Pruning strategies, state management\r\n- Recursion: Memoization, tail recursion\r\n- Divide and conquer: Merge sort, quick sort\r\n- Greedy: Proof of optimality\r\n",
+      "System_Design": "# System Design - Week 2\r\n\r\n## Core Concepts\r\n- Design review and best practices\r\n- Scalability patterns (horizontal vs vertical)\r\n- Reliability patterns (redundancy, failover)\r\n- Consistency patterns (strong, eventual, causal)\r\n\r\n## Interview Focus Points\r\n- **Scalability**: Horizontal scaling strategies, auto-scaling\r\n- **Reliability**: Redundancy, failover, disaster recovery\r\n- **Consistency**: Trade-offs, use cases for each model\r\n- **Design review**: Common mistakes, best practices\r\n\r\n## Practice\r\n- Review and improve existing system designs\r\n- Design for 99.99% availability\r\n- Design a globally distributed system\r\n\r\n## Reading\r\n- Scalability patterns and anti-patterns\r\n- Reliability engineering principles\r\n- Consistency models and trade-offs\r\n- System design best practices\r\n",
+      "Revision": "# Revision - Week 2\r\n\r\n## What to Revise\r\n- Week 1: Bit manipulation, Math (quick review)\r\n- Backtracking basics from Month_2\r\n- Advanced backtracking: Pruning, optimization\r\n- Divide and conquer: Sorting algorithms\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Advanced backtracking [MUST] problems\r\n2. **Day 2**: Divide and conquer problems (sorting)\r\n3. **Day 3**: Review Month_2 backtracking basics\r\n4. **Day 4**: Mixed practice (backtracking + recursion)\r\n5. **Day 5**: Mock interview: 2 problems, 60 min\r\n\r\n## Focus Areas\r\n- Backtracking: Pruning strategies, state management\r\n- Recursion: Memoization, base cases\r\n- Divide and conquer: Merge/quick sort implementation\r\n- Optimization: Reduce time complexity with memoization\r\n\r\n## Common Mistakes to Avoid\r\n- Backtracking: Not unchoosing correctly\r\n- Recursion: Missing base cases, stack overflow\r\n- Divide and conquer: Incorrect merge logic\r\n- Not using memoization when applicable\r\n"
+    },
+    "3": {
+      "Behavioral": "# Behavioral - Week 3\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Company-Specific Preparation\r\n- **Research**: Target company's values, culture, products\r\n- **Align Stories**: Match stories to company values\r\n- **Product Knowledge**: Understand company's products/services\r\n- **Technical Focus**: Research company's tech stack, challenges\r\n\r\n### Interview Readiness\r\n- **Story Refinement**: Finalize all STAR stories (12-15 total)\r\n- **Practice**: 90-second versions of each story\r\n- **Questions**: Prepare questions to ask interviewers\r\n- **Weaknesses**: Prepare \"weakness\" answer (growth-focused)\r\n\r\n### Communication\r\n- **Clarity**: Practice explaining complex concepts simply\r\n- **Examples**: Have concrete examples ready\r\n- **Enthusiasm**: Show passion for technology and company\r\n- **Follow-up**: Prepare for follow-up questions\r\n\r\n## Question Themes\r\n- \"Why this company?\"\r\n- \"Why this role?\"\r\n- \"Tell me about yourself\"\r\n- \"What are your weaknesses?\"\r\n- \"Where do you see yourself in 5 years?\"\r\n\r\n## Preparation\r\n- Research target companies thoroughly\r\n- Align stories with company values\r\n- Practice all common behavioral questions\r\n- Prepare thoughtful questions for interviewers\r\n",
+      "DSA": "# DSA - Week 3\r\n\r\n## Topics (Order)\r\n1. Design Problems (OOD)\r\n2. System Design Coding\r\n3. Concurrency Problems\r\n4. Real-world Problem Solving\r\n\r\n## Patterns to Learn\r\n- Object-oriented design\r\n- Thread-safe data structures\r\n- Producer-consumer patterns\r\n- Rate limiting implementation\r\n\r\n## Problems (12 total)\r\n\r\n### Design Problems\r\n- [MUST] LRU Cache (146)\r\n- [MUST] Design Twitter (355)\r\n- [GOOD] Design Hit Counter (362)\r\n- [GOOD] Design Search Autocomplete System (642)\r\n- [GOOD] Design Tic-Tac-Toe (348)\r\n\r\n### System Design Coding\r\n- [MUST] Design Parking Lot (OOD)\r\n- [GOOD] Design Elevator System (OOD)\r\n- [GOOD] Design Vending Machine (OOD)\r\n\r\n### Concurrency\r\n- [GOOD] Print in Order (1114)\r\n- [GOOD] Print FooBar Alternately (1115)\r\n- [GOOD] Design Bounded Blocking Queue (1188)\r\n\r\n### Real-world\r\n- [GOOD] Design Rate Limiter\r\n- [GOOD] Design Distributed Lock\r\n\r\n## Focus\r\n- OOD: Classes, relationships, SOLID principles\r\n- Thread safety: Locks, semaphores, atomic operations\r\n- Design: Scalability, extensibility considerations\r\n- Real-world: Practical system components\r\n",
+      "System_Design": "# System Design - Week 3\r\n\r\n## Core Concepts\r\n- Company-specific system design (Google, Amazon, Meta, etc.)\r\n- Domain-specific designs (e-commerce, social media, etc.)\r\n- Design trade-offs and decision making\r\n- Design presentation and communication\r\n\r\n## Interview Focus Points\r\n- **Company focus**: Research target company's systems\r\n- **Domain expertise**: E-commerce, social media, streaming, etc.\r\n- **Trade-offs**: Explain decisions clearly\r\n- **Communication**: Present design clearly, handle questions\r\n\r\n## Practice\r\n- Design systems specific to target companies\r\n- Practice explaining trade-offs\r\n- Mock system design interviews\r\n- Review real-world system designs\r\n\r\n## Reading\r\n- Company engineering blogs\r\n- Real-world system design case studies\r\n- Domain-specific design patterns\r\n- System design interview tips\r\n",
+      "Revision": "# Revision - Week 3\r\n\r\n## What to Revise\r\n- Week 1: Bit manipulation, Math (quick review)\r\n- Week 2: Advanced backtracking, Divide and conquer\r\n- Week 3: Design problems, OOD, Concurrency\r\n- All core patterns from Months 1-4\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: Design [MUST] problems (LRU Cache, Design Twitter)\r\n2. **Day 2**: OOD problems (Parking Lot, Elevator)\r\n3. **Day 3**: Review all [MUST] problems from Months 1-4\r\n4. **Day 4**: Mock interview: 1 design + 1 DSA problem\r\n5. **Day 5**: Weak area focus and pattern review\r\n\r\n## Focus Areas\r\n- OOD: SOLID principles, class design, relationships\r\n- Design: Scalability, thread safety, extensibility\r\n- Concurrency: Thread safety, synchronization\r\n- Real-world: Practical implementation details\r\n\r\n## Common Mistakes to Avoid\r\n- OOD: Not considering extensibility\r\n- Design: Not handling edge cases\r\n- Concurrency: Race conditions, deadlocks\r\n- Not explaining design decisions clearly\r\n"
+    },
+    "4": {
+      "Behavioral": "# Behavioral - Week 4\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Final Preparation\r\n- **Story Bank**: 12-15 polished STAR stories\r\n- **Practice**: 90-second versions, 2-minute versions\r\n- **Variety**: Cover all question themes\r\n- **Alignment**: Match stories to target companies\r\n\r\n### Interview Skills\r\n- **Communication**: Clear, concise, structured\r\n- **Examples**: Concrete, quantifiable results\r\n- **Enthusiasm**: Show passion and energy\r\n- **Questions**: Thoughtful questions for interviewers\r\n\r\n### Company Research\r\n- **Values**: Understand company culture and values\r\n- **Products**: Know company's products/services\r\n- **Tech Stack**: Research technologies used\r\n- **Challenges**: Understand company's technical challenges\r\n\r\n## Question Themes (Final Review)\r\n- All previous themes\r\n- \"Tell me about yourself\" (2-min elevator pitch)\r\n- \"Why should we hire you?\"\r\n- \"Do you have any questions for us?\"\r\n\r\n## Preparation\r\n- Finalize all stories\r\n- Practice with mock interviews\r\n- Research all target companies\r\n- Prepare questions for each company\r\n- Review common interview mistakes\r\n",
+      "DSA": "# DSA - Week 4\r\n\r\n## Topics (Order)\r\n1. Mock Interview Practice\r\n2. Company-Specific Problems\r\n3. Hard Problem Practice\r\n4. Speed and Accuracy\r\n\r\n## Patterns to Learn\r\n- Problem identification (quick pattern recognition)\r\n- Solution optimization (time/space trade-offs)\r\n- Code quality (clean, readable, maintainable)\r\n- Communication (explain while coding)\r\n\r\n## Problems (Focus on Quality)\r\n\r\n### Mock Interviews\r\n- Practice 2-3 problems per day (45-60 min each)\r\n- Mix of easy, medium, hard problems\r\n- Random topics from all months\r\n- Time-boxed practice\r\n\r\n### Company-Specific\r\n- Research target company's favorite problems\r\n- Practice problems from company's interview experiences\r\n- Focus on company's preferred patterns\r\n\r\n### Hard Problems\r\n- [GOOD] Trapping Rain Water II (407)\r\n- [GOOD] Serialize and Deserialize N-ary Tree (428)\r\n- [GOOD] Design In-Memory File System (588)\r\n- [GOOD] Word Ladder II (126)\r\n\r\n## Focus\r\n- Speed: Solve medium in 25-30 min\r\n- Accuracy: Handle all edge cases\r\n- Communication: Explain approach clearly\r\n- Code quality: Production-ready code\r\n",
+      "System_Design": "# System Design - Week 4\r\n\r\n## Core Concepts\r\n- Mock system design interviews\r\n- Company-specific design focus\r\n- Design presentation skills\r\n- Handling follow-up questions\r\n\r\n## Interview Focus Points\r\n- **Mock Interviews**: Practice full system design interviews\r\n- **Company Focus**: Research target company's systems\r\n- **Presentation**: Clear communication, structured approach\r\n- **Questions**: Handle deep-dive questions confidently\r\n\r\n## Practice\r\n- Mock system design interviews (2-3 per week)\r\n- Practice explaining trade-offs\r\n- Review real-world system designs\r\n- Practice time management (45 min design)\r\n\r\n## Reading\r\n- System design interview preparation\r\n- Real-world system architectures\r\n- Company engineering blogs\r\n- Design patterns and best practices\r\n",
+      "Revision": "# Revision - Week 4\r\n\r\n## What to Revise\r\n- **Full Program Review**: All topics from Months 1-4\r\n- **Priority**: All [MUST] problems\r\n- **Patterns**: All patterns learned\r\n- **Weak Areas**: Focus on identified gaps\r\n\r\n## Re-solve Strategy\r\n1. **Day 1**: All [MUST] problems quick review (spot check)\r\n2. **Day 2**: Mock interview practice (2-3 problems)\r\n3. **Day 3**: Company-specific problem practice\r\n4. **Day 4**: Hard problem practice\r\n5. **Day 5**: Full assessment and gap analysis\r\n\r\n## Focus Areas\r\n- Speed: Solve medium problems in 20-25 min\r\n- Accuracy: Handle all edge cases correctly\r\n- Communication: Explain approach clearly\r\n- Code quality: Clean, readable, optimized\r\n\r\n## Common Mistakes to Avoid\r\n- Rushing without understanding problem\r\n- Not handling edge cases\r\n- Poor code organization\r\n- Not explaining approach clearly\r\n\r\n## Month 4 Assessment\r\n- **Target**: Interview-ready for MAANG companies\r\n- **Speed**: Medium problems in 20-25 min\r\n- **System Design**: Confident in design interviews\r\n- **Behavioral**: Polished STAR stories\r\n- **Next**: Months 5-6 focus on mock interviews and refinement\r\n"
+    }
+  },
+  "5": {
+    "1": {
+      "Behavioral": "# Behavioral - Week 1\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Final Refinement\r\n- **Story Bank**: 12-15 polished stories\r\n- **Practice**: Mock behavioral interviews\r\n- **Variety**: Cover all question themes\r\n- **Alignment**: Match to target companies\r\n\r\n### Interview Skills\r\n- **Communication**: Clear, structured, engaging\r\n- **Examples**: Quantifiable, concrete results\r\n- **Enthusiasm**: Show passion and energy\r\n- **Questions**: Thoughtful questions ready\r\n\r\n### Company Research\r\n- **Values**: Deep understanding of company culture\r\n- **Products**: Know products/services in detail\r\n- **Tech Stack**: Research technologies and challenges\r\n- **Recent News**: Stay updated on company news\r\n\r\n## Question Themes (Practice)\r\n- \"Tell me about yourself\" (2-min pitch)\r\n- \"Why this company?\" (specific reasons)\r\n- \"Why this role?\" (alignment with goals)\r\n- \"What are your weaknesses?\" (growth-focused)\r\n- \"Where do you see yourself in 5 years?\"\r\n\r\n## Preparation\r\n- Practice all stories with timer (90 sec, 2 min)\r\n- Mock behavioral interviews\r\n- Research all target companies deeply\r\n- Prepare company-specific questions\r\n- Review common interview mistakes\r\n",
+      "DSA": "# DSA - Week 1\r\n\r\n## Topics (Order)\r\n1. Mock Interview Intensive\r\n2. Company-Specific Problem Sets\r\n3. Hard Problem Mastery\r\n4. Speed Drills\r\n\r\n## Focus\r\n- **Mock Interviews**: 3-4 per week (45-60 min each)\r\n- **Company Focus**: Target company problem sets\r\n- **Hard Problems**: Master complex problems\r\n- **Speed**: Medium problems in 20-25 min\r\n\r\n## Problems (Practice-Based)\r\n\r\n### Daily Practice\r\n- 2-3 problems per day (mix of easy/medium/hard)\r\n- Time-boxed: Easy (15 min), Medium (25 min), Hard (40 min)\r\n- Random topics from all months\r\n- Focus on accuracy and speed\r\n\r\n### Company-Specific\r\n- Google: Graph, DP, String problems\r\n- Amazon: Array, String, Tree problems\r\n- Meta: Array, Graph, Backtracking\r\n- Microsoft: Tree, Graph, DP problems\r\n- Apple: Array, String, Design problems\r\n\r\n### Hard Problems\r\n- [GOOD] Trapping Rain Water II (407)\r\n- [GOOD] Word Ladder II (126)\r\n- [GOOD] Serialize and Deserialize N-ary Tree (428)\r\n- [GOOD] Design In-Memory File System (588)\r\n- [GOOD] Alien Dictionary (269)\r\n\r\n## Focus\r\n- Pattern recognition: Identify problem type in 2-3 min\r\n- Solution quality: Clean, optimized code\r\n- Communication: Explain approach clearly\r\n- Edge cases: Handle all edge cases\r\n",
+      "System_Design": "# System Design - Week 1\r\n\r\n## Core Concepts\r\n- Mock System Design Interviews\r\n- Company-Specific Design Focus\r\n- Design Deep Dives\r\n- Trade-off Analysis\r\n\r\n## Interview Focus Points\r\n- **Mock Interviews**: 2-3 system design mocks per week\r\n- **Company Focus**: Research target company's architecture\r\n- **Deep Dives**: Handle detailed technical questions\r\n- **Trade-offs**: Explain decisions clearly\r\n\r\n## Practice\r\n- Mock system design interviews (45 min each)\r\n- Practice common system design problems\r\n- Review real-world architectures\r\n- Practice explaining trade-offs\r\n\r\n## Common Design Problems\r\n- Design Twitter (feed, timeline)\r\n- Design Instagram (photo sharing)\r\n- Design Uber (ride matching)\r\n- Design Netflix (video streaming)\r\n- Design WhatsApp (messaging)\r\n\r\n## Reading\r\n- Company engineering blogs\r\n- Real-world system architectures\r\n- System design case studies\r\n- Design patterns and best practices\r\n",
+      "Revision": "# Revision - Week 1\r\n\r\n## What to Revise\r\n- **Comprehensive Review**: All topics from Months 1-4\r\n- **Weak Areas**: Focus on identified gaps\r\n- **Patterns**: Quick pattern recognition\r\n- **Speed**: Time-boxed practice\r\n\r\n## Re-solve Strategy\r\n1. **Daily**: 2-3 problems (mix of topics)\r\n2. **Mock Interviews**: 3-4 per week\r\n3. **Company-Specific**: Focus on target companies\r\n4. **Hard Problems**: 1-2 hard problems per week\r\n5. **Review**: Weekly review of mistakes\r\n\r\n## Focus Areas\r\n- Speed: Medium problems in 20-25 min\r\n- Accuracy: Handle all edge cases\r\n- Communication: Clear explanation\r\n- Code quality: Production-ready\r\n\r\n## Common Mistakes to Avoid\r\n- Rushing without understanding\r\n- Not handling edge cases\r\n- Poor code organization\r\n- Not explaining approach\r\n\r\n## Week 1 Assessment\r\n- Track mock interview performance\r\n- Identify recurring mistakes\r\n- Focus on weak areas\r\n- Maintain consistency\r\n"
+    },
+    "2": {
+      "Behavioral": "# Behavioral - Week 2\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Story Refinement\r\n- **Polish**: Refine all stories for clarity\r\n- **Practice**: Daily practice with timer\r\n- **Feedback**: Get feedback from peers\r\n- **Variation**: Prepare multiple versions\r\n\r\n### Interview Readiness\r\n- **Confidence**: Build interview confidence\r\n- **Clarity**: Clear, concise communication\r\n- **Examples**: Ready examples for all themes\r\n- **Questions**: Thoughtful questions prepared\r\n\r\n### Company Alignment\r\n- **Research**: Deep research on target companies\r\n- **Alignment**: Align stories with company values\r\n- **Products**: Understand products/services\r\n- **Culture**: Understand company culture\r\n\r\n## Question Themes (Advanced)\r\n- \"Tell me about a failure\" (with lessons learned)\r\n- \"How do you handle stress?\"\r\n- \"Describe a conflict\" (resolution focus)\r\n- \"What motivates you?\"\r\n- \"Why are you leaving current role?\"\r\n\r\n## Preparation\r\n- Practice all question types\r\n- Prepare failure stories (with growth)\r\n- Research company culture deeply\r\n- Prepare thoughtful questions\r\n- Mock interviews with feedback\r\n",
+      "DSA": "# DSA - Week 2\r\n\r\n## Topics (Order)\r\n1. Advanced Problem Solving\r\n2. Optimization Techniques\r\n3. Code Quality Focus\r\n4. Interview Simulation\r\n\r\n## Focus\r\n- **Advanced Problems**: Complex multi-step problems\r\n- **Optimization**: Time and space optimization\r\n- **Code Quality**: Clean, maintainable code\r\n- **Simulation**: Full interview simulation\r\n\r\n## Problems (Advanced Focus)\r\n\r\n### Advanced Practice\r\n- Multi-step problems requiring multiple patterns\r\n- Problems with multiple solutions (compare approaches)\r\n- Optimization challenges (reduce time/space)\r\n- Real-world problem scenarios\r\n\r\n### Optimization Focus\r\n- Space optimization: Reduce O(n) to O(1)\r\n- Time optimization: Reduce O(n²) to O(n log n)\r\n- Algorithm selection: Choose best approach\r\n- Data structure selection: Optimal choice\r\n\r\n### Code Quality\r\n- Clean code principles\r\n- Meaningful variable names\r\n- Proper comments\r\n- Error handling\r\n\r\n## Focus\r\n- Problem decomposition: Break complex problems down\r\n- Solution comparison: Multiple approaches\r\n- Optimization: Always optimize after brute force\r\n- Code review: Self-review for quality\r\n",
+      "System_Design": "# System Design - Week 2\r\n\r\n## Core Concepts\r\n- Advanced System Design Topics\r\n- Scalability Deep Dives\r\n- Performance Optimization\r\n- Design Patterns Application\r\n\r\n## Interview Focus Points\r\n- **Advanced Topics**: Distributed systems, consensus\r\n- **Scalability**: Handle millions/billions of requests\r\n- **Performance**: Latency, throughput optimization\r\n- **Patterns**: Apply design patterns appropriately\r\n\r\n## Practice\r\n- Advanced system design problems\r\n- Scalability-focused designs\r\n- Performance optimization scenarios\r\n- Design pattern applications\r\n\r\n## Advanced Topics\r\n- Distributed consensus (Raft, Paxos)\r\n- Event sourcing and CQRS\r\n- Microservices patterns\r\n- Service mesh architecture\r\n- Database sharding strategies\r\n\r\n## Reading\r\n- Distributed systems deep dives\r\n- Scalability patterns\r\n- Performance optimization techniques\r\n- Real-world system architectures\r\n",
+      "Revision": "# Revision - Week 2\r\n\r\n## What to Revise\r\n- **Pattern Mastery**: Quick pattern recognition\r\n- **Optimization**: Time/space optimization techniques\r\n- **Code Quality**: Clean code principles\r\n- **Weak Areas**: Focus on gaps\r\n\r\n## Re-solve Strategy\r\n1. **Daily**: 2-3 problems with optimization focus\r\n2. **Mock Interviews**: Continue regular mocks\r\n3. **Code Review**: Self-review for quality\r\n4. **Optimization**: Always optimize solutions\r\n5. **Review**: Weekly performance review\r\n\r\n## Focus Areas\r\n- Optimization: Reduce time/space complexity\r\n- Code quality: Clean, readable, maintainable\r\n- Problem solving: Systematic approach\r\n- Communication: Clear explanation\r\n\r\n## Common Mistakes to Avoid\r\n- Not optimizing after brute force\r\n- Poor code organization\r\n- Not explaining optimization\r\n- Missing edge cases\r\n\r\n## Week 2 Assessment\r\n- Track optimization improvements\r\n- Monitor code quality\r\n- Track optimization success rate\r\n- Maintain consistency\r\n"
+    },
+    "3": {
+      "Behavioral": "# Behavioral - Week 3\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Final Polish\r\n- **Mastery**: All stories polished and ready\r\n- **Practice**: Daily practice with variations\r\n- **Confidence**: High confidence in delivery\r\n- **Alignment**: Perfect alignment with companies\r\n\r\n### Interview Excellence\r\n- **Communication**: Clear, engaging, structured\r\n- **Examples**: Quantifiable, impressive results\r\n- **Enthusiasm**: Genuine passion and energy\r\n- **Questions**: Insightful questions ready\r\n\r\n### Company Mastery\r\n- **Research**: Complete understanding of companies\r\n- **Alignment**: Stories match company values\r\n- **Products**: Deep product knowledge\r\n- **Culture**: Cultural fit demonstrated\r\n\r\n## Question Themes (Mastery)\r\n- All previous themes mastered\r\n- Company-specific questions\r\n- Role-specific questions\r\n- Team-specific questions\r\n\r\n## Preparation\r\n- Final story polish\r\n- Mock interviews with feedback\r\n- Complete company research\r\n- Prepare company-specific questions\r\n- Final readiness check\r\n",
+      "DSA": "# DSA - Week 3\r\n\r\n## Topics (Order)\r\n1. Company-Specific Intensive\r\n2. Problem Pattern Mastery\r\n3. Speed and Accuracy\r\n4. Interview Readiness\r\n\r\n## Focus\r\n- **Company Focus**: Deep dive into target companies\r\n- **Pattern Mastery**: Instant pattern recognition\r\n- **Speed**: Consistent 20-25 min for medium\r\n- **Readiness**: Interview-ready state\r\n\r\n## Problems (Company-Specific)\r\n\r\n### Google Focus\r\n- Graph algorithms (DFS, BFS, shortest path)\r\n- Dynamic programming (advanced)\r\n- String algorithms (advanced)\r\n- System design coding\r\n\r\n### Amazon Focus\r\n- Array and string manipulation\r\n- Tree problems (traversal, construction)\r\n- Design problems (OOD)\r\n- System design\r\n\r\n### Meta Focus\r\n- Array problems (two pointers, sliding window)\r\n- Graph problems (social network scenarios)\r\n- Backtracking problems\r\n- System design\r\n\r\n### Microsoft Focus\r\n- Tree and graph problems\r\n- Dynamic programming\r\n- String algorithms\r\n- System design\r\n\r\n## Focus\r\n- Company patterns: Recognize company preferences\r\n- Problem selection: Practice company-favorite problems\r\n- Interview style: Adapt to company interview style\r\n- Readiness: Full interview simulation\r\n",
+      "System_Design": "# System Design - Week 3\r\n\r\n## Core Concepts\r\n- Company-Specific System Design\r\n- Design Deep Dives\r\n- Trade-off Mastery\r\n- Communication Excellence\r\n\r\n## Interview Focus Points\r\n- **Company Focus**: Research target company's systems\r\n- **Deep Dives**: Handle detailed technical questions\r\n- **Trade-offs**: Explain decisions clearly and confidently\r\n- **Communication**: Present designs clearly\r\n\r\n## Practice\r\n- Company-specific design problems\r\n- Mock interviews with company focus\r\n- Deep-dive practice sessions\r\n- Trade-off explanation practice\r\n\r\n## Company-Specific Focus\r\n- Google: Search, distributed systems, scalability\r\n- Amazon: E-commerce, AWS services, distributed systems\r\n- Meta: Social networks, real-time systems, scale\r\n- Microsoft: Cloud services, enterprise systems\r\n- Apple: iOS systems, services, privacy\r\n\r\n## Reading\r\n- Company engineering blogs (deep dive)\r\n- Company system architectures\r\n- Company technical challenges\r\n- Company design philosophies\r\n",
+      "Revision": "# Revision - Week 3\r\n\r\n## What to Revise\r\n- **Company-Specific**: Target company problem sets\r\n- **Pattern Mastery**: Instant recognition\r\n- **Speed**: Consistent performance\r\n- **Readiness**: Interview-ready state\r\n\r\n## Re-solve Strategy\r\n1. **Company Focus**: Daily company-specific problems\r\n2. **Mock Interviews**: Company-focused mocks\r\n3. **Pattern Review**: Quick pattern recognition drills\r\n4. **Speed Practice**: Time-boxed problem solving\r\n5. **Final Review**: Comprehensive readiness check\r\n\r\n## Focus Areas\r\n- Company patterns: Recognize instantly\r\n- Speed: Consistent 20-25 min for medium\r\n- Accuracy: Handle all edge cases\r\n- Communication: Clear, confident explanation\r\n\r\n## Common Mistakes to Avoid\r\n- Not adapting to company style\r\n- Rushing without understanding\r\n- Missing company-specific patterns\r\n- Poor communication\r\n\r\n## Week 3 Assessment\r\n- Company-specific readiness\r\n- Pattern recognition speed\r\n- Interview simulation performance\r\n- Final readiness evaluation\r\n"
+    },
+    "4": {
+      "Behavioral": "# Behavioral - Week 4\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Final Preparation\r\n- **Mastery**: All stories mastered\r\n- **Confidence**: High delivery confidence\r\n- **Alignment**: Perfect company alignment\r\n- **Readiness**: Interview-ready state\r\n\r\n### Interview Excellence\r\n- **Communication**: Polished delivery\r\n- **Examples**: Impressive, quantifiable results\r\n- **Enthusiasm**: Genuine passion\r\n- **Questions**: Insightful questions ready\r\n\r\n### Final Check\r\n- Story bank complete (12-15 stories)\r\n- All question themes covered\r\n- Company research complete\r\n- Questions prepared for each company\r\n\r\n## Question Themes (Final)\r\n- All themes mastered\r\n- Company-specific ready\r\n- Role-specific ready\r\n- Team-specific ready\r\n\r\n## Preparation\r\n- Final story practice\r\n- Mock interviews (light)\r\n- Complete company research\r\n- Final readiness check\r\n- Mental preparation\r\n",
+      "DSA": "# DSA - Week 4\r\n\r\n## Topics (Order)\r\n1. Final Mock Interview Prep\r\n2. Problem Mastery Review\r\n3. Speed Maintenance\r\n4. Interview Confidence\r\n\r\n## Focus\r\n- **Final Prep**: Last week before interviews\r\n- **Mastery**: All patterns mastered\r\n- **Speed**: Maintained performance\r\n- **Confidence**: High interview confidence\r\n\r\n## Problems (Maintenance Mode)\r\n\r\n### Daily Practice\r\n- 1-2 problems per day (maintain skills)\r\n- Focus on accuracy over speed\r\n- Review favorite problems\r\n- Light practice to stay sharp\r\n\r\n### Final Review\r\n- Review all [MUST] problems\r\n- Quick pattern recognition\r\n- Common mistake review\r\n- Confidence building\r\n\r\n### Interview Readiness\r\n- Mock interview final check\r\n- Problem-solving confidence\r\n- Communication practice\r\n- Mental preparation\r\n\r\n## Focus\r\n- Maintenance: Keep skills sharp\r\n- Confidence: Build interview confidence\r\n- Review: Quick review of key patterns\r\n- Preparation: Mental and technical prep\r\n",
+      "System_Design": "# System Design - Week 4\r\n\r\n## Core Concepts\r\n- Final System Design Prep\r\n- Design Confidence\r\n- Trade-off Mastery\r\n- Interview Readiness\r\n\r\n## Interview Focus Points\r\n- **Final Prep**: Last week preparation\r\n- **Confidence**: High design confidence\r\n- **Mastery**: All concepts mastered\r\n- **Readiness**: Interview-ready state\r\n\r\n## Practice\r\n- Light mock interviews (maintain skills)\r\n- Design review and confidence building\r\n- Trade-off explanation practice\r\n- Final readiness check\r\n\r\n## Final Preparation\r\n- Review common design problems\r\n- Practice trade-off explanations\r\n- Build design confidence\r\n- Mental preparation\r\n\r\n## Reading\r\n- Light reading (avoid overload)\r\n- Review key concepts\r\n- Confidence building materials\r\n- Interview tips and strategies\r\n",
+      "Revision": "# Revision - Week 4\r\n\r\n## What to Revise\r\n- **Final Review**: Quick review of key concepts\r\n- **Maintenance**: Keep skills sharp\r\n- **Confidence**: Build interview confidence\r\n- **Readiness**: Final readiness check\r\n\r\n## Re-solve Strategy\r\n1. **Light Practice**: 1-2 problems per day\r\n2. **Review**: Quick pattern review\r\n3. **Confidence**: Build interview confidence\r\n4. **Preparation**: Mental and technical prep\r\n5. **Final Check**: Comprehensive readiness\r\n\r\n## Focus Areas\r\n- Maintenance: Keep skills sharp\r\n- Confidence: High interview confidence\r\n- Review: Key patterns and concepts\r\n- Preparation: Mental readiness\r\n\r\n## Common Mistakes to Avoid\r\n- Over-practicing (burnout)\r\n- Last-minute cramming\r\n- Neglecting mental prep\r\n- Not maintaining confidence\r\n\r\n## Month 5 Assessment\r\n- Interview readiness: High\r\n- Skills mastery: Complete\r\n- Confidence: High\r\n- Preparation: Complete\r\n- **Next**: Month 6 - Interview execution and refinement\r\n"
+    }
+  },
+  "6": {
+    "1": {
+      "Behavioral": "# Behavioral - Week 1\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Interview Execution\r\n- **Delivery**: Confident story delivery\r\n- **Adaptation**: Adapt to interviewer style\r\n- **Engagement**: Engage with interviewer\r\n- **Questions**: Ask thoughtful questions\r\n\r\n### Post-Interview\r\n- **Analysis**: Review performance\r\n- **Feedback**: Process feedback\r\n- **Improvement**: Refine stories\r\n- **Learning**: Learn from experience\r\n\r\n### Continuous Refinement\r\n- **Polish**: Continue refining stories\r\n- **Variation**: Adapt to different contexts\r\n- **Confidence**: Maintain high confidence\r\n- **Readiness**: Stay interview-ready\r\n\r\n## Question Themes (Execution)\r\n- All themes ready for delivery\r\n- Adapt to interviewer style\r\n- Engage in conversation\r\n- Ask insightful questions\r\n\r\n## Preparation\r\n- Confident story delivery\r\n- Post-interview analysis\r\n- Continuous refinement\r\n- Maintain readiness\r\n",
+      "DSA": "# DSA - Week 1\r\n\r\n## Topics (Order)\r\n1. Interview Execution\r\n2. Post-Interview Analysis\r\n3. Continuous Improvement\r\n4. Skill Maintenance\r\n\r\n## Focus\r\n- **Interviews**: Active interview period\r\n- **Analysis**: Post-interview review\r\n- **Improvement**: Continuous refinement\r\n- **Maintenance**: Keep skills sharp\r\n\r\n## Practice Strategy\r\n\r\n### During Interviews\r\n- Light daily practice (1 problem)\r\n- Maintain problem-solving skills\r\n- Review patterns as needed\r\n- Stay sharp between interviews\r\n\r\n### Post-Interview\r\n- Analyze interview performance\r\n- Identify areas for improvement\r\n- Review mistakes and learnings\r\n- Adjust preparation strategy\r\n\r\n### Continuous Learning\r\n- Learn from each interview\r\n- Refine problem-solving approach\r\n- Improve communication skills\r\n- Build on feedback\r\n\r\n## Focus\r\n- Execution: Perform well in interviews\r\n- Analysis: Learn from each interview\r\n- Improvement: Continuous refinement\r\n- Maintenance: Keep skills current\r\n",
+      "System_Design": "# System Design - Week 1\r\n\r\n## Core Concepts\r\n- Interview Execution\r\n- Design Presentation\r\n- Post-Interview Analysis\r\n- Continuous Improvement\r\n\r\n## Interview Focus Points\r\n- **Execution**: Perform well in design interviews\r\n- **Presentation**: Clear, structured design presentation\r\n- **Analysis**: Post-interview review and learning\r\n- **Improvement**: Continuous refinement\r\n\r\n## Practice Strategy\r\n\r\n### During Interviews\r\n- Light design review\r\n- Maintain design thinking\r\n- Review key concepts\r\n- Stay confident\r\n\r\n### Post-Interview\r\n- Analyze design performance\r\n- Review feedback\r\n- Identify improvement areas\r\n- Refine design approach\r\n\r\n### Continuous Learning\r\n- Learn from each interview\r\n- Refine design skills\r\n- Improve communication\r\n- Build on feedback\r\n\r\n## Focus\r\n- Execution: Strong design interviews\r\n- Analysis: Learn from experience\r\n- Improvement: Refine continuously\r\n- Confidence: Maintain high confidence\r\n",
+      "Revision": "# Revision - Week 1\r\n\r\n## What to Revise\r\n- **Maintenance**: Keep skills sharp\r\n- **Analysis**: Post-interview review\r\n- **Improvement**: Continuous refinement\r\n- **Confidence**: Maintain confidence\r\n\r\n## Re-solve Strategy\r\n1. **Light Practice**: Maintain skills\r\n2. **Analysis**: Review each interview\r\n3. **Improvement**: Refine based on feedback\r\n4. **Confidence**: Maintain high confidence\r\n5. **Readiness**: Stay interview-ready\r\n\r\n## Focus Areas\r\n- Execution: Strong interview performance\r\n- Analysis: Learn from each interview\r\n- Improvement: Continuous refinement\r\n- Maintenance: Keep skills current\r\n\r\n## Common Mistakes to Avoid\r\n- Over-analyzing (paralysis)\r\n- Neglecting maintenance\r\n- Losing confidence\r\n- Not learning from feedback\r\n\r\n## Week 1 Assessment\r\n- Interview performance tracking\r\n- Feedback analysis\r\n- Improvement identification\r\n- Confidence maintenance\r\n"
+    },
+    "2": {
+      "Behavioral": "# Behavioral - Week 2\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Interview Continuation\r\n- **Delivery**: Confident, polished delivery\r\n- **Adaptation**: Adapt to different interviewers\r\n- **Engagement**: Strong engagement\r\n- **Questions**: Insightful questions\r\n\r\n### Performance Analysis\r\n- **Review**: Analyze each interview\r\n- **Feedback**: Process and learn from feedback\r\n- **Refinement**: Continue refining stories\r\n- **Improvement**: Identify improvement areas\r\n\r\n### Continuous Excellence\r\n- **Polish**: Maintain story quality\r\n- **Variation**: Adapt to contexts\r\n- **Confidence**: High confidence\r\n- **Readiness**: Always ready\r\n\r\n## Question Themes (Continuation)\r\n- All themes mastered\r\n- Adapt to interviewer style\r\n- Engage effectively\r\n- Ask great questions\r\n\r\n## Preparation\r\n- Confident delivery\r\n- Performance analysis\r\n- Continuous refinement\r\n- Maintain excellence\r\n",
+      "DSA": "# DSA - Week 2\r\n\r\n## Topics (Order)\r\n1. Interview Continuation\r\n2. Performance Analysis\r\n3. Skill Refinement\r\n4. Advanced Problem Practice\r\n\r\n## Focus\r\n- **Interviews**: Continue interview process\r\n- **Analysis**: Deep performance analysis\r\n- **Refinement**: Refine problem-solving skills\r\n- **Advanced**: Practice advanced problems\r\n\r\n## Practice Strategy\r\n\r\n### Active Interview Period\r\n- Maintain daily practice (1-2 problems)\r\n- Focus on weak areas identified\r\n- Practice company-specific problems\r\n- Stay sharp and confident\r\n\r\n### Performance Analysis\r\n- Track interview performance\r\n- Identify patterns in mistakes\r\n- Focus on improvement areas\r\n- Refine approach\r\n\r\n### Skill Refinement\r\n- Work on identified weaknesses\r\n- Practice advanced problems\r\n- Improve communication\r\n- Enhance problem-solving speed\r\n\r\n## Focus\r\n- Continuation: Strong interview performance\r\n- Analysis: Deep performance review\r\n- Refinement: Skill improvement\r\n- Advanced: Challenge yourself\r\n",
+      "System_Design": "# System Design - Week 2\r\n\r\n## Core Concepts\r\n- Interview Continuation\r\n- Design Performance Analysis\r\n- Advanced Design Topics\r\n- Communication Refinement\r\n\r\n## Interview Focus Points\r\n- **Continuation**: Strong design interviews\r\n- **Analysis**: Deep performance review\r\n- **Advanced**: Advanced design topics\r\n- **Communication**: Refine presentation skills\r\n\r\n## Practice Strategy\r\n\r\n### Active Interview Period\r\n- Maintain design thinking\r\n- Review key concepts\r\n- Practice trade-off explanations\r\n- Stay confident\r\n\r\n### Performance Analysis\r\n- Analyze design performance\r\n- Review feedback deeply\r\n- Identify improvement areas\r\n- Refine design approach\r\n\r\n### Advanced Topics\r\n- Explore advanced design topics\r\n- Practice complex scenarios\r\n- Improve trade-off explanations\r\n- Enhance communication\r\n\r\n## Focus\r\n- Continuation: Strong design interviews\r\n- Analysis: Deep performance review\r\n- Advanced: Explore advanced topics\r\n- Communication: Refine skills\r\n",
+      "Revision": "# Revision - Week 2\r\n\r\n## What to Revise\r\n- **Maintenance**: Keep skills sharp\r\n- **Analysis**: Deep performance analysis\r\n- **Refinement**: Skill refinement\r\n- **Advanced**: Advanced practice\r\n\r\n## Re-solve Strategy\r\n1. **Daily Practice**: Maintain skills\r\n2. **Analysis**: Deep performance review\r\n3. **Refinement**: Work on weaknesses\r\n4. **Advanced**: Challenge yourself\r\n5. **Confidence**: Maintain high confidence\r\n\r\n## Focus Areas\r\n- Continuation: Strong performance\r\n- Analysis: Learn from experience\r\n- Refinement: Improve continuously\r\n- Advanced: Challenge yourself\r\n\r\n## Common Mistakes to Avoid\r\n- Complacency\r\n- Not learning from feedback\r\n- Neglecting maintenance\r\n- Losing confidence\r\n\r\n## Week 2 Assessment\r\n- Performance tracking\r\n- Feedback analysis\r\n- Improvement progress\r\n- Confidence level\r\n"
+    },
+    "3": {
+      "Behavioral": "# Behavioral - Week 3\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Final Interview Push\r\n- **Mastery**: Story delivery mastery\r\n- **Confidence**: Maximum confidence\r\n- **Engagement**: Strong engagement\r\n- **Excellence**: Interview excellence\r\n\r\n### Performance Excellence\r\n- **Delivery**: Perfect story delivery\r\n- **Adaptation**: Excellent adaptation\r\n- **Engagement**: Strong engagement\r\n- **Questions**: Great questions\r\n\r\n### Interview Mastery\r\n- **Mastery**: Complete interview mastery\r\n- **Confidence**: Maximum confidence\r\n- **Readiness**: Always ready\r\n- **Excellence**: Consistent excellence\r\n\r\n## Question Themes (Mastery)\r\n- All themes mastered\r\n- Perfect delivery\r\n- Strong engagement\r\n- Great questions\r\n\r\n## Preparation\r\n- Master story delivery\r\n- Build maximum confidence\r\n- Perfect engagement\r\n- Maintain excellence\r\n",
+      "DSA": "# DSA - Week 3\r\n\r\n## Topics (Order)\r\n1. Final Interview Push\r\n2. Performance Optimization\r\n3. Confidence Building\r\n4. Interview Mastery\r\n\r\n## Focus\r\n- **Final Push**: Last interview rounds\r\n- **Optimization**: Optimize performance\r\n- **Confidence**: Build maximum confidence\r\n- **Mastery**: Interview mastery\r\n\r\n## Practice Strategy\r\n\r\n### Final Interview Rounds\r\n- Maintain peak performance\r\n- Focus on accuracy and speed\r\n- Practice company-specific problems\r\n- Stay sharp and confident\r\n\r\n### Performance Optimization\r\n- Optimize problem-solving approach\r\n- Improve communication clarity\r\n- Enhance time management\r\n- Perfect interview technique\r\n\r\n### Confidence Building\r\n- Build maximum confidence\r\n- Review past successes\r\n- Practice favorite problems\r\n- Mental preparation\r\n\r\n## Focus\r\n- Final Push: Peak performance\r\n- Optimization: Perfect technique\r\n- Confidence: Maximum confidence\r\n- Mastery: Interview mastery\r\n",
+      "System_Design": "# System Design - Week 3\r\n\r\n## Core Concepts\r\n- Final Interview Push\r\n- Design Mastery\r\n- Communication Excellence\r\n- Interview Confidence\r\n\r\n## Interview Focus Points\r\n- **Final Push**: Last design interviews\r\n- **Mastery**: Design interview mastery\r\n- **Communication**: Excellent presentation\r\n- **Confidence**: Maximum confidence\r\n\r\n## Practice Strategy\r\n\r\n### Final Interview Rounds\r\n- Maintain design excellence\r\n- Perfect trade-off explanations\r\n- Clear, structured presentations\r\n- High confidence\r\n\r\n### Design Mastery\r\n- Master all design concepts\r\n- Perfect communication\r\n- Excellent trade-off analysis\r\n- Confident delivery\r\n\r\n### Communication Excellence\r\n- Clear, structured presentations\r\n- Engaging delivery\r\n- Thoughtful questions\r\n- Strong engagement\r\n\r\n## Focus\r\n- Final Push: Peak design performance\r\n- Mastery: Design interview mastery\r\n- Communication: Excellent skills\r\n- Confidence: Maximum confidence\r\n",
+      "Revision": "# Revision - Week 3\r\n\r\n## What to Revise\r\n- **Final Push**: Peak performance preparation\r\n- **Optimization**: Perfect technique\r\n- **Confidence**: Maximum confidence\r\n- **Mastery**: Interview mastery\r\n\r\n## Re-solve Strategy\r\n1. **Peak Performance**: Maintain peak state\r\n2. **Optimization**: Perfect technique\r\n3. **Confidence**: Build maximum confidence\r\n4. **Mastery**: Achieve interview mastery\r\n5. **Final Prep**: Final readiness check\r\n\r\n## Focus Areas\r\n- Final Push: Peak performance\r\n- Optimization: Perfect technique\r\n- Confidence: Maximum confidence\r\n- Mastery: Complete mastery\r\n\r\n## Common Mistakes to Avoid\r\n- Overthinking\r\n- Losing confidence\r\n- Neglecting preparation\r\n- Not maintaining peak state\r\n\r\n## Week 3 Assessment\r\n- Peak performance tracking\r\n- Confidence level\r\n- Mastery assessment\r\n- Final readiness\r\n"
+    },
+    "4": {
+      "Behavioral": "# Behavioral - Week 4\r\n\r\n## STAR Stories to Prepare\r\n\r\n### Interview Completion\r\n- **Success**: Successful interview completion\r\n- **Learning**: Learn from experience\r\n- **Refinement**: Continue refining\r\n- **Future**: Build on foundation\r\n\r\n### Offer Negotiation\r\n- **Preparation**: Negotiation preparation\r\n- **Strategy**: Negotiation strategy\r\n- **Confidence**: Confident negotiation\r\n- **Success**: Successful negotiation\r\n\r\n### Future Development\r\n- **Learning**: Continue learning\r\n- **Growth**: Personal growth\r\n- **Excellence**: Maintain excellence\r\n- **Future**: Future opportunities\r\n\r\n## Question Themes (Completion)\r\n- All themes mastered\r\n- Interview success\r\n- Negotiation readiness\r\n- Future focus\r\n\r\n## Preparation\r\n- Interview completion\r\n- Negotiation preparation\r\n- Future learning\r\n- Continuous growth\r\n",
+      "DSA": "# DSA - Week 4\r\n\r\n## Topics (Order)\r\n1. Interview Completion\r\n2. Offer Negotiation Prep\r\n3. Skill Maintenance\r\n4. Future Learning\r\n\r\n## Focus\r\n- **Completion**: Interview process completion\r\n- **Negotiation**: Offer negotiation preparation\r\n- **Maintenance**: Maintain skills\r\n- **Future**: Continue learning\r\n\r\n## Practice Strategy\r\n\r\n### Post-Interview\r\n- Maintain skills (light practice)\r\n- Review and learn from experience\r\n- Prepare for offer negotiations\r\n- Continue learning\r\n\r\n### Offer Negotiation\r\n- Research market rates\r\n- Prepare negotiation strategy\r\n- Understand offer components\r\n- Practice negotiation\r\n\r\n### Future Learning\r\n- Continue skill development\r\n- Explore advanced topics\r\n- Stay current with trends\r\n- Build on foundation\r\n\r\n## Focus\r\n- Completion: Successful interview completion\r\n- Negotiation: Strong negotiation position\r\n- Maintenance: Keep skills current\r\n- Future: Continuous learning\r\n",
+      "System_Design": "# System Design - Week 4\r\n\r\n## Core Concepts\r\n- Interview Completion\r\n- Design Skill Maintenance\r\n- Advanced Learning\r\n- Future Development\r\n\r\n## Interview Focus Points\r\n- **Completion**: Successful design interviews\r\n- **Maintenance**: Keep design skills current\r\n- **Learning**: Continue learning\r\n- **Future**: Build on foundation\r\n\r\n## Practice Strategy\r\n\r\n### Post-Interview\r\n- Maintain design thinking\r\n- Review and learn\r\n- Continue learning\r\n- Build on experience\r\n\r\n### Advanced Learning\r\n- Explore advanced topics\r\n- Study real-world systems\r\n- Learn new patterns\r\n- Stay current\r\n\r\n### Future Development\r\n- Continue skill development\r\n- Explore new areas\r\n- Build expertise\r\n- Stay relevant\r\n\r\n## Focus\r\n- Completion: Successful completion\r\n- Maintenance: Keep skills current\r\n- Learning: Continue learning\r\n- Future: Build expertise\r\n",
+      "Revision": "# Revision - Week 4\r\n\r\n## What to Revise\r\n- **Completion**: Interview process completion\r\n- **Learning**: Learn from experience\r\n- **Maintenance**: Keep skills current\r\n- **Future**: Future development\r\n\r\n## Re-solve Strategy\r\n1. **Completion**: Successful completion\r\n2. **Learning**: Learn from experience\r\n3. **Maintenance**: Keep skills current\r\n4. **Future**: Continue learning\r\n5. **Reflection**: Reflect on journey\r\n\r\n## Focus Areas\r\n- Completion: Successful completion\r\n- Learning: Learn from experience\r\n- Maintenance: Keep skills current\r\n- Future: Build on foundation\r\n\r\n## Common Mistakes to Avoid\r\n- Complacency after success\r\n- Neglecting maintenance\r\n- Stopping learning\r\n- Not reflecting\r\n\r\n## Month 6 & Program Assessment\r\n- **Completion**: Successful 6-month journey\r\n- **Skills**: Mastered all core skills\r\n- **Confidence**: High interview confidence\r\n- **Future**: Ready for career growth\r\n- **Achievement**: MAANG interview readiness achieved\r\n"
+    }
+  }
+};
+        </script>
+    
+    </body>
+</html>
