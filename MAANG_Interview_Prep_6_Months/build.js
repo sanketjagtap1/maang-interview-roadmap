@@ -23,11 +23,9 @@ function readAllMarkdownFiles() {
                 try {
                     if (fs.existsSync(filePath)) {
                         const content = fs.readFileSync(filePath, 'utf8');
-                        // Escape content for JavaScript embedding
-                        contentData[month][week][category] = content
-                            .replace(/\\/g, '\\\\')
-                            .replace(/`/g, '\\`')
-                            .replace(/\${/g, '\\${');
+                        // Use JSON.stringify to properly escape all special characters
+                        // This handles backticks, dollar signs, newlines, quotes, etc.
+                        contentData[month][week][category] = content;
                     } else {
                         contentData[month][week][category] = `# ${category} - Week ${week}\n\nContent file not found.`;
                     }
@@ -49,6 +47,10 @@ function readHTMLTemplate() {
 
 // Embed content data into HTML
 function embedContentInHTML(html, contentData) {
+    // Remove any existing embeddedContent script
+    const embeddedContentRegex = /<script>\s*\/\/ Embedded markdown content\s*const embeddedContent = [\s\S]*?<\/script>/g;
+    html = html.replace(embeddedContentRegex, '');
+    
     // Convert contentData to JSON string, then embed it
     const contentScript = `
         <script>
